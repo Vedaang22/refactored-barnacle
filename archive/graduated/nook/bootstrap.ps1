@@ -18,10 +18,10 @@ if ($TargetDir -eq "") {
 $TargetDir = [System.IO.Path]::GetFullPath($TargetDir)
 
 Write-Output ""
-Write-Output "🚀 Bootstrapping $RepoName into $TargetDir"
+Write-Output "System: Bootstrapping $RepoName into $TargetDir"
 Write-Output ""
 
-# ── 1. Create folder structure ───────────────────────────────
+# --- 1. Create folder structure ------------------------------
 $Dirs = @(
     "src/client-ios/Room", "src/client-ios/AvatarComposite", "src/client-ios/NookWidgets", "src/client-ios/Lobby", "src/client-ios/Moderation",
     "src/client-android/room", "src/client-android/AvatarComposite", "src/client-android/widgets", "src/client-android/lobby", "src/client-android/moderation",
@@ -39,7 +39,7 @@ foreach ($Dir in $Dirs) {
     }
 }
 
-Write-Output "✓ Folder structure created"
+Write-Output "[OK] Folder structure created"
 
 # Helper function to write UTF-8 files
 function Write-FileContent($RelativePath, $Content) {
@@ -51,21 +51,21 @@ function Write-FileContent($RelativePath, $Content) {
     [System.IO.File]::WriteAllText($FullPath, $Content, [System.Text.Encoding]::UTF8)
 }
 
-# ── 2. Write AGENTS.md ───────────────────────────────────────
+# --- 2. Write AGENTS.md --------------------------------------
 $AgentsContent = @'
-# AGENTS.md — Nook
+# AGENTS.md - Nook
 
 ## What this repo is
 Nook is a lightweight, mobile-first spatial social network that gives Gen Z a cozy, pressure-free digital space to co-exist, customize virtual rooms, and interact asynchronously directly from their mobile home screens. The codebase contains native iOS (Swift, WidgetKit) and Android (Kotlin, Jetpack Compose) client applications, alongside a TypeScript Node.js WebSocket sync backend.
 
 ## Codebase layout
-- `src/client-ios/` — Native iOS client application code (Swift, WidgetKit, Metal-based canvas)
-- `src/client-android/` — Native Android client application code (Kotlin, AppWidgets, Jetpack Compose)
-- `src/server/` — Node.js WebSocket server code (TypeScript, ws/Socket.io, Redis, PostgreSQL)
-- `tests/unit/` — Unit tests for clients and backend engines
-- `tests/load-test/` — Load testing scripts for WebSocket client traffic and server buffers
-- `docs/` — Product vision, roadmap, architecture specs, data models, and ADRs
-- `.agents/skills/` — Task-oriented development guides and workspace skills
+- `src/client-ios/` - Native iOS client application code (Swift, WidgetKit, Metal-based canvas)
+- `src/client-android/` - Native Android client application code (Kotlin, AppWidgets, Jetpack Compose)
+- `src/server/` - Node.js WebSocket server code (TypeScript, ws/Socket.io, Redis, PostgreSQL)
+- `tests/unit/` - Unit tests for clients and backend engines
+- `tests/load-test/` - Load testing scripts for WebSocket client traffic and server buffers
+- `docs/` - Product vision, roadmap, architecture specs, data models, and ADRs
+- `.agents/skills/` - Task-oriented development guides and workspace skills
 
 ## How to run locally
 1. **Prerequisites**: Install Node.js (v18+), PostgreSQL, Redis, Xcode (for iOS), and Android Studio (for Android).
@@ -106,9 +106,9 @@ Nook is a lightweight, mobile-first spatial social network that gives Gen Z a co
 
 Write-FileContent "AGENTS.md" $AgentsContent
 Write-FileContent ".github/AGENTS.md" $AgentsContent
-Write-Output "✓ AGENTS.md written"
+Write-Output "[OK] AGENTS.md written"
 
-# ── 3. Scaffold skills ───────────────────────────────────────
+# --- 3. Scaffold skills --------------------------------------
 
 # dev-setup
 Write-FileContent ".agents/skills/dev-setup/dev-setup.md" @'
@@ -146,7 +146,7 @@ Write-FileContent ".agents/skills/code-review/code-review.md" @'
 name: code-review
 description: >
   Reviews code for correctness, consistency with conventions,
-  missing tests, and scope creep. Does not rewrite — annotates and explains.
+  missing tests, and scope creep. Does not rewrite - annotates and explains.
 ---
 # Code Review
 
@@ -165,7 +165,7 @@ Write-FileContent ".agents/skills/debug/debug.md" @'
 ---
 name: debug
 description: >
-  Systematic diagnosis of errors — reads logs, traces the call
+  Systematic diagnosis of errors - reads logs, traces the call
   stack, identifies root cause, proposes fix with explanation.
 ---
 # Debugging Guide
@@ -300,9 +300,9 @@ This skill handles checking user-submitted whiteboard drawings and widget duets.
 - Flagged sketches must trigger a local UI block warning without sending contents to public databases.
 '@
 
-Write-Output "✓ Skills scaffolded"
+Write-Output "[OK] Skills scaffolded"
 
-# ── 4. Copy graduation documents ─────────────────────────────
+# --- 4. Copy graduation documents -----------------------------
 Copy-Item (Join-Path $IdeaDir "vision.md")            (Join-Path $TargetDir "docs/vision.md") -Force
 Copy-Item (Join-Path $IdeaDir "roadmap.md")           (Join-Path $TargetDir "docs/roadmap.md") -Force
 Copy-Item (Join-Path $IdeaDir "feasibility.md")       (Join-Path $TargetDir "docs/feasibility.md") -Force
@@ -311,13 +311,13 @@ Copy-Item (Join-Path $IdeaDir "agents-blueprint.md")  (Join-Path $TargetDir "doc
 if (Test-Path (Join-Path $IdeaDir "synthesis.md")) {
     Copy-Item (Join-Path $IdeaDir "synthesis.md")     (Join-Path $TargetDir "docs/synthesis.md") -Force
 }
-Write-Output "✓ Graduation documents copied to docs/"
+Write-Output "[OK] Graduation documents copied to docs/"
 
-# ── 5. Write ADR files ───────────────────────────────────────
+# --- 5. Write ADR files ---------------------------------------
 
 # ADR 001
 Write-FileContent "docs/decisions/001-spatial-social-pivot.md" @'
-# ADR 001 — Spatial Social Pivot
+# ADR 001 - Spatial Social Pivot
 
 **Date:** 2026-06-20  
 **Status:** Accepted  
@@ -341,7 +341,7 @@ We pivoted to a complete spatial social network called Nook. Instead of static f
 
 # ADR 002
 Write-FileContent "docs/decisions/002-async-widget-cache.md" @'
-# ADR 002 — Asynchronous Widget Caching
+# ADR 002 - Asynchronous Widget Caching
 
 **Date:** 2026-06-20  
 **Status:** Accepted  
@@ -362,7 +362,7 @@ Ensures responsiveness stays under 150ms regardless of active cellular connectiv
 
 # ADR 003
 Write-FileContent "docs/decisions/003-on-device-moderation.md" @'
-# ADR 003 — On-Device Safety Checks
+# ADR 003 - On-Device Safety Checks
 
 **Date:** 2026-06-20  
 **Status:** Accepted  
@@ -385,7 +385,7 @@ Implement a local on-device neural network classifier using CoreML (iOS) and Ten
 
 # ADR 004
 Write-FileContent "docs/decisions/004-vector-stroke-sync.md" @'
-# ADR 004 — Vector Stroke Synchronization
+# ADR 004 - Vector Stroke Synchronization
 
 **Date:** 2026-06-20  
 **Status:** Accepted  
@@ -408,7 +408,7 @@ Synchronize drawings as JSON coordinate arrays: `[{x: float, y: float, t: number
 
 # ADR 005
 Write-FileContent "docs/decisions/005-pre-composited-sprites.md" @'
-# ADR 005 — Pre-Composited Sprite Sheets
+# ADR 005 - Pre-Composited Sprite Sheets
 
 **Date:** 2026-06-20  
 **Status:** Accepted  
@@ -427,19 +427,19 @@ The widget extension reads and displays a single pre-rendered PNG from local dis
 - Demands file sync queues between the main app workspace and widget bundle folders.
 '@
 
-Write-Output "✓ Architecture decision records written"
+Write-Output "[OK] Architecture decision records written"
 
-# ── 6. Write README.md ───────────────────────────────────────
+# --- 6. Write README.md ---------------------------------------
 Write-FileContent "README.md" @'
 # Nook
 
 A virtual room-based spatial social network for Gen Z featuring customizable pixel-art rooms, personalized pixel avatars ("Nookies"), interactive widget pets, and haptic widget communication.
 
 ## Codebase Structure
-- `src/client-ios/` — Native Swift iOS client (WidgetKit, SwiftUI, Metal)
-- `src/client-android/` — Native Kotlin Android client (Glance, Compose)
-- `src/server/` — TypeScript Node.js sync server (WebSockets, Redis, Prisma)
-- `docs/` — Product designs, specifications, and architecture decisions
+- `src/client-ios/` - Native Swift iOS client (WidgetKit, SwiftUI, Metal)
+- `src/client-android/` - Native Kotlin Android client (Glance, Compose)
+- `src/server/` - TypeScript Node.js sync server (WebSockets, Redis, Prisma)
+- `docs/` - Product designs, specifications, and architecture decisions
 
 ## Dev Setup
 Please see the onboarding document:
@@ -449,20 +449,20 @@ Or open this folder in the Antigravity CLI and type:
 `set up the dev environment`
 
 ## Architecture Documents
-- [Vision](docs/vision.md) — Product requirements and goals
-- [Roadmap](docs/roadmap.md) — Sprints and feature classification
-- [Feasibility](docs/feasibility.md) — Technical risks and mitigations
-- [Architecture Decisions](docs/decisions/) — ADR catalog
+- [Vision](docs/vision.md) - Product requirements and goals
+- [Roadmap](docs/roadmap.md) - Sprints and feature classification
+- [Feasibility](docs/feasibility.md) - Technical risks and mitigations
+- [Architecture Decisions](docs/decisions/) - ADR catalog
 
 ## Contributing
 Commit format must follow semver scopes:
 `[ios]`, `[android]`, `[server]`, `[docs]`, `[test]`.
 '@
-Write-Output "✓ README.md written"
+Write-Output "[OK] README.md written"
 
-# ── 7. Write .env.example ────────────────────────────────────
+# --- 7. Write .env.example ------------------------------------
 Write-FileContent ".env.example" @'
-# Nook — Environment Variables
+# Nook - Environment Variables
 # Copy to .env and fill in values. Never commit .env.
 
 # Server Configuration
@@ -489,16 +489,16 @@ APNS_KEY_ID="your-apple-push-key-id"
 APNS_TEAM_ID="your-apple-developer-team-id"
 FCM_SERVER_KEY="your-firebase-cloud-messaging-key"
 '@
-Write-Output "✓ .env.example written"
+Write-Output "[OK] .env.example written"
 
-# ── 8. Git init ──────────────────────────────────────────────
+# --- 8. Git init ----------------------------------------------
 $CurrentDir = Get-Location
 try {
     Set-Location $TargetDir
     git init -q
     git add .
     git commit -q -m "init: bootstrap from idea-lab graduation"
-    Write-Output "✓ Git initialized — initial commit made"
+    Write-Output "[OK] Git initialized - initial commit made"
 }
 catch {
     Write-Warning "Failed to initialize Git in target directory: $_"
@@ -507,16 +507,16 @@ finally {
     Set-Location $CurrentDir
 }
 
-# ── Summary ──────────────────────────────────────────────────
+# --- Summary --------------------------------------------------
 Write-Output ""
-Write-Output "════════════════════════════════════════"
+Write-Output "========================================"
 Write-Output "  $RepoName is ready at $TargetDir"
-Write-Output "════════════════════════════════════════"
+Write-Output "========================================"
 Write-Output ""
 Write-Output "Next steps:"
 Write-Output "  1. cd $TargetDir"
 Write-Output "  2. Create the GitHub repo and push: gh repo create $RepoName --private && git push -u origin main"
 Write-Output "  3. Fill in .env from .env.example"
-Write-Output "  4. Spike on the highest-risk dependency (see docs/roadmap.md — Phase 0)"
+Write-Output "  4. Spike on the highest-risk dependency (see docs/roadmap.md - Phase 0)"
 Write-Output "  5. Open in Antigravity and say: 'set up the dev environment'"
 Write-Output ""
