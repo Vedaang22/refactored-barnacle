@@ -68,6 +68,8 @@ Nook is a lightweight, mobile-first spatial social network that gives Gen Z a co
 - Do not build high-speed direct text chats (use doodles, haptic knobs, or asynchronous audio-draw vectors instead).
 - Do not run dynamic sprite compositing inside the widget extensions (composite to shared containers within main app background threads instead).
 - Do not perform database updates without writing a Prisma migration script in `src/server/prisma/migrations/`.
+- Do not compute streak state inside widget extensions — widgets must read from local cache written by the main app.
+- Do not regenerate Trading Card PNGs on every request — cache invalidation triggers only on avatar or Room save events.
 ```
 
 ---
@@ -116,22 +118,40 @@ For each skill below, the agent should create the file at
 **Key context:** The Widget Extension has a hard memory cap of 30MB. Runtime overlays of multiple layers will crash the widget. Avatars must be pre-composited into a single flat PNG inside the app's Shared Group Container, allowing widgets to read and display a single cached file.
 
 #### `widget-interaction`
-**Purpose:** Manages interactive widget logic, such as Tic-Tac-Toe games, Widget Duet canvases, Nook Pet feed loops, and Vibe-Knock triggers.
-**Triggers:** "widget click handler", "interactive widget game move", "AppIntent sync", "widget duet update", "vibe-knock push notify"
+**Purpose:** Manages interactive widget logic, such as Tic-Tac-Toe games, Widget Duet canvases, Nook Pet feed loops, and Vibe-Knock triggers. Also renders Nook Streaks counter and Mood Capsule emoji stamp on home screen widgets.
+**Triggers:** "widget click handler", "interactive widget game move", "AppIntent sync", "widget duet update", "vibe-knock push notify", "streak widget render", "mood capsule widget display"
 **Scope:** `src/client-ios/NookWidgets/`, `src/client-android/widgets/`, `src/server/controllers/widget.ts`
-**Key context:** Widget interactivity is heavily throttled by mobile operating systems. Use local caches to update the widget UI instantaneously on-screen, then dispatch a background network thread to sync the game or haptic state to the server.
+**Key context:** Widget interactivity is heavily throttled by mobile operating systems. Use local caches to update the widget UI instantaneously on-screen, then dispatch a background network thread to sync the game or haptic state to the server. Streak count is read from local cache written by the main app — never computed inside the widget extension. Mood Capsule emoji is read from local store written by the silent push handler, not fetched over network at render time.
 
 #### `community-halls`
-**Purpose:** Manages thematic public lounge interfaces, room card list updates, and real-time multiplayer Walking Nookie coordinates using WebSocket endpoints.
-**Triggers:** "community hall room card", "websocket lobby sync", "walking avatar coordinate sync", "lounge socket controller"
+**Purpose:** Manages thematic public lounge interfaces, room card list updates, and real-time multiplayer Walking Nookie coordinates using WebSocket endpoints. Also owns Hall Campfire async audio ember upload/stream/expire flow and Room of the Week weekly voting and winner reward pipeline.
+**Triggers:** "community hall room card", "websocket lobby sync", "walking avatar coordinate sync", "lounge socket controller", "campfire audio ember", "room of the week vote", "hall voting reset"
 **Scope:** `src/server/sockets/`, `src/client-ios/Lobby/`, `src/client-android/lobby/`
-**Key context:** Public lounges use Socket.io/ws. Real-time character movements must utilize Redis pub/sub buffers to group broadcast commands and limit execution to 10 frame updates per second to protect mobile battery/CPUs.
+**Key context:** Public lounges use Socket.io/ws. Real-time character movements must utilize Redis pub/sub buffers to group broadcast commands and limit execution to 10 frame updates per second to protect mobile battery/CPUs. Hall Campfire embers are stored as compressed AAC on CDN and expire after 24h via server TTL; audio content must be screened by an on-device audio classifier before upload — no server audio moderation. Room of the Week voting resets every Monday at 00:00 UTC; winning Room receives a server-generated IAP token for exclusive furniture; upvote is once-per-user-per-week enforced in Postgres.
 
 #### `content-moderation`
-**Purpose:** Manages local on-device neural network classifiers (CoreML on iOS, TensorFlow Lite on Android) for real-time sketching guardrails.
-**Triggers:** "doodle check AI", "local sketch classification model", "moderation guardrail", "nsfw stroke filter"
+**Purpose:** Manages local on-device neural network classifiers (CoreML on iOS, TensorFlow Lite on Android) for real-time sketching guardrails. Also screens Hall Campfire audio clips before upload.
+**Triggers:** "doodle check AI", "local sketch classification model", "moderation guardrail", "nsfw stroke filter", "audio ember screen"
 **Scope:** `src/client-ios/Moderation/`, `src/client-android/moderation/`
-**Key context:** All drawings and blackboard guest entries must run through on-device models to prevent bad content updates from reaching widgets. Screening must run under 100ms completely client-side before queuing save operations.
+**Key context:** All drawings and blackboard guest entries must run through on-device models to prevent bad content updates from reaching widgets. Screening must run under 100ms completely client-side before queuing save operations. Hall Campfire audio clips must also be screened on-device before upload to CDN.
+
+#### `retention-engine`
+**Purpose:** Manages Nook Streaks (F-17) consecutive-day widget interaction counter between friend pairs, and Mood Capsule (F-20) once-daily emoji mood stamp delivered to close friends via silent push.
+**Triggers:** "streak counter", "friend streak", "mood capsule", "daily emoji stamp", "streak reset", "pet sad state", "streak TTL", "mood expiry job"
+**Scope:** `src/client-ios/RetentionEngine/`, `src/client-android/retention/`, `src/server/services/streaks.ts`, `src/server/jobs/mood-capsule-expiry.ts`
+**Key context:** Streak TTL is 25h in Redis (not 24h) — the extra hour gives grace to late-night users whose streak would otherwise break at midnight. Any widget action (duet move, pet feed, game move, vibe-knock) resets the streak timer. Breaking the streak triggers a visual sad state on the Nook Pet. Never compute streak state inside the widget extension — the main app writes streak count to local cache; the widget reads it. Mood Capsule removal is a scheduled cron job on the server, not a client-side timer — the job fires every hour and deletes capsules whose created_at is older than 24h, then sends a silent push to remove the stamp from recipients' widgets. Mood Capsule requires no reply, no text, and no interaction from recipients.
+
+#### `virality-tools`
+**Purpose:** Manages the Pixel Photo Booth (F-22) in-app camera and on-device pixel-art render pipeline, and Nookie Trading Cards (F-19) collectible card generation, CDN hosting, and Room wall-art pinning.
+**Triggers:** "photo booth", "pixelate selfie", "Metal shader selfie", "share to Instagram Stories", "share to TikTok", "trading card", "collectible card", "pin card in room", "card shelf"
+**Scope:** `src/client-ios/PhotoBooth/`, `src/client-android/photobooth/`, `src/server/assets/trading-cards/`
+**Key context:** Photo Booth render pipeline is fully on-device (Metal fragment shader on iOS / RenderScript on Android) — there is no server round-trip for image processing. The selfie is pixelated to Nookie sprite scale, the Nookie sprite is composited as an overlay, and the current Room background is composited as the bottom layer — all in-memory, exported as JPEG for the OS share sheet with an embedded `nook.me/[username]` deep-link overlay. Trading Card PNG (512×512) is generated server-side from a snapshot of the user's current Nookie avatar + Room state and cached on CDN. Never regenerate a Trading Card on every request — cache invalidation triggers only on avatar save events or Room save events. Friends pin Trading Cards as special furniture items inside their Room; a dedicated card shelf in the Room displays the collection.
+
+#### `haptic-engine`
+**Purpose:** Manages Secret Knock Code (F-23) — the per-friendship unique rhythmic haptic pattern — and extends the existing Vibe-Knocks infrastructure so every Vibe-Knock pulses in the friendship-specific pattern.
+**Triggers:** "secret knock", "knock pattern", "haptic handshake", "friendship vibration pattern", "tap to record pattern", "CoreHaptics", "VibrationEffect waveform"
+**Scope:** `src/client-ios/HapticEngine/`, `src/client-android/haptics/`, `src/server/models/friendship.ts`
+**Key context:** The knock pattern is stored as `knock_pattern: number[]` on the Friendship join table in Postgres. The array contains alternating vibrate/pause durations in milliseconds (e.g. `[100, 50, 200, 50, 100]`). Maximum 10 elements and 2000ms total duration — enforce both limits server-side and client-side to prevent abuse. iOS uses `CoreHaptics` `CHHapticEngine` with a custom `CHHapticPattern` built from the array. Android uses `VibrationEffect.createWaveform(timings, amplitudes, -1)`. Friends co-edit the pattern via a simple tap-to-record UI that records on/off intervals. Vibe-Knocks always pulse in the friendship-specific pattern — default to a generic pattern `[100, 50, 100]` if no custom pattern is set yet.
 
 ---
 
@@ -170,3 +190,7 @@ Before the first line of code, the agent should create these files in `docs/`:
 | `docs/decisions/003-on-device-moderation.md` | Architecture Decision Record: Resolving the risk of offensive widget drawing updates by running a local on-device neural network classifier. | graduation-handoff.md decisions section |
 | `docs/decisions/004-vector-stroke-sync.md` | Architecture Decision Record: Using compact coordinate stroke JSON payloads (`{x, y, t}`) rather than rasterized PNG files to optimize bandwidth and support playbacks. | graduation-handoff.md decisions section |
 | `docs/decisions/005-pre-composited-sprites.md` | Architecture Decision Record: Pre-rendering avatar layers into flat PNG files via main app background tasks to avoid the 30MB widget RAM limitation. | graduation-handoff.md decisions section |
+| `docs/decisions/006-retention-loop-design.md` | Architecture Decision Record: Adding Nook Streaks + Mood Capsule as explicit variable-reward retention mechanics at MVP. Streak TTL = 25h Redis key; mood capsule = server-scheduled cron expiry. | feasibility refresh — D7 collapse risk |
+| `docs/decisions/007-hall-campfire-async-audio.md` | Architecture Decision Record: Using async audio embers (24h TTL) instead of live audio rooms to solve the Community Hall low-concurrency empty-feeling problem. Embers stream directly from CDN. | community halls concurrency analysis |
+| `docs/decisions/008-pixel-art-validation-gate.md` | Architecture Decision Record: Pixel art aesthetic must be validated via paid split-test ad before asset catalog production begins. Split-test: pixel vs. Bitmoji 3D vs. Zepeto anime, budget ₹1500 Instagram/TikTok. | assumption challenger output |
+| `docs/decisions/009-on-device-photo-booth.md` | Architecture Decision Record: Pixel Photo Booth render pipeline is fully on-device (Metal/RenderScript), no server processing. Metal fragment shader pixelates selfie; Nookie sprite and Room background composited in-memory. | privacy + latency analysis |

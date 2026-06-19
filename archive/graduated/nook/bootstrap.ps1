@@ -1,49 +1,70 @@
 param(
-    [string]$TargetDir = ""
+    [string]$Target = ""
 )
 
 $RepoName = "nook"
 $IdeaDir = $PSScriptRoot
 
-if ($TargetDir -eq "") {
-    $TargetDir = Join-Path (Get-Item $PSScriptRoot).Parent.Parent.FullName $RepoName
+if ($Target -eq "") {
+    $Target = Join-Path (Get-Item $PSScriptRoot).Parent.Parent.FullName $RepoName
 } else {
-    # Resolve relative paths relative to current location
-    if (-not [System.IO.Path]::IsPathRooted($TargetDir)) {
-        $TargetDir = Join-Path (Get-Location).Path $TargetDir
+    if (-not [System.IO.Path]::IsPathRooted($Target)) {
+        $Target = Join-Path (Get-Location).Path $Target
     }
 }
 
-# Clean up path formatting
-$TargetDir = [System.IO.Path]::GetFullPath($TargetDir)
+$Target = [System.IO.Path]::GetFullPath($Target)
 
-Write-Output ""
-Write-Output "System: Bootstrapping $RepoName into $TargetDir"
-Write-Output ""
+Write-Host ""
+Write-Host "Bootstrapping $RepoName into $Target"
+Write-Host ""
 
-# --- 1. Create folder structure ------------------------------
+# ── 1. Create folder structure ────────────────────────────────────────────────
 $Dirs = @(
-    "src/client-ios/Room", "src/client-ios/AvatarComposite", "src/client-ios/NookWidgets", "src/client-ios/Lobby", "src/client-ios/Moderation",
-    "src/client-android/room", "src/client-android/AvatarComposite", "src/client-android/widgets", "src/client-android/lobby", "src/client-android/moderation",
-    "src/server/controllers", "src/server/models", "src/server/sockets", "src/server/prisma", "src/server/assets",
-    "tests/unit", "tests/load-test",
+    "src/client-ios/Room",
+    "src/client-ios/AvatarComposite",
+    "src/client-ios/NookWidgets",
+    "src/client-ios/Lobby",
+    "src/client-ios/Moderation",
+    "src/client-ios/RetentionEngine",
+    "src/client-ios/PhotoBooth",
+    "src/client-ios/HapticEngine",
+    "src/client-android/room",
+    "src/client-android/AvatarComposite",
+    "src/client-android/widgets",
+    "src/client-android/lobby",
+    "src/client-android/moderation",
+    "src/client-android/retention",
+    "src/client-android/photobooth",
+    "src/client-android/haptics",
+    "src/server/controllers",
+    "src/server/models",
+    "src/server/sockets",
+    "src/server/prisma",
+    "src/server/assets/avatar",
+    "src/server/assets/trading-cards",
+    "src/server/services",
+    "src/server/jobs",
+    "tests/unit",
+    "tests/load-test",
     "docs/decisions",
     ".agents/skills",
     ".github"
 )
 
 foreach ($Dir in $Dirs) {
-    $FullPath = Join-Path $TargetDir $Dir
+    $FullPath = Join-Path $Target $Dir
     if (-not (Test-Path $FullPath)) {
         New-Item -ItemType Directory -Force -Path $FullPath | Out-Null
     }
 }
 
-Write-Output "[OK] Folder structure created"
+Write-Host "[OK] Folder structure created"
 
-# Helper function to write UTF-8 files
-function Write-FileContent($RelativePath, $Content) {
-    $FullPath = Join-Path $TargetDir $RelativePath
+# ── Helper: write UTF-8 file ──────────────────────────────────────────────────
+function Write-FileContent {
+    param([string]$RelativePath, [string]$Content)
+    $FullPath = Join-Path $Target $RelativePath
     $ParentDir = Split-Path $FullPath
     if (-not (Test-Path $ParentDir)) {
         New-Item -ItemType Directory -Force -Path $ParentDir | Out-Null
@@ -51,7 +72,7 @@ function Write-FileContent($RelativePath, $Content) {
     [System.IO.File]::WriteAllText($FullPath, $Content, [System.Text.Encoding]::UTF8)
 }
 
-# --- 2. Write AGENTS.md --------------------------------------
+# ── 2. Write AGENTS.md ────────────────────────────────────────────────────────
 $AgentsContent = @'
 # AGENTS.md - Nook
 
@@ -102,15 +123,16 @@ Nook is a lightweight, mobile-first spatial social network that gives Gen Z a co
 - Do not build high-speed direct text chats (use doodles, haptic knocks, or asynchronous audio-draw vectors instead).
 - Do not run dynamic sprite compositing inside the widget extensions (composite to shared containers within main app background threads instead).
 - Do not perform database updates without writing a Prisma migration script in `src/server/prisma/migrations/`.
+- Do not compute streak state inside widget extensions - widgets must read from local cache written by the main app.
+- Do not regenerate Trading Card PNGs on every request - cache invalidation triggers only on avatar or Room save events.
 '@
 
 Write-FileContent "AGENTS.md" $AgentsContent
 Write-FileContent ".github/AGENTS.md" $AgentsContent
-Write-Output "[OK] AGENTS.md written"
+Write-Host "[OK] AGENTS.md written"
 
-# --- 3. Scaffold skills --------------------------------------
+# ── 3. Scaffold skills ────────────────────────────────────────────────────────
 
-# dev-setup
 Write-FileContent ".agents/skills/dev-setup/dev-setup.md" @'
 ---
 name: dev-setup
@@ -123,7 +145,7 @@ description: >
 This skill guides you through getting the iOS, Android, and Server development environments running locally.
 
 ## Prerequisite Software
-- Node.js (v18+) & npm
+- Node.js (v18+) and npm
 - PostgreSQL (v14+)
 - Redis
 - Xcode 15+ (for iOS development)
@@ -140,7 +162,6 @@ This skill guides you through getting the iOS, Android, and Server development e
 - Execute tests using `npm run test`.
 '@
 
-# code-review
 Write-FileContent ".agents/skills/code-review/code-review.md" @'
 ---
 name: code-review
@@ -154,13 +175,14 @@ This skill assesses code submissions to maintain the technical standards of the 
 
 ## Review Checklist
 1. **Conventions**: Swift style rules, Kotlin naming guides, and TypeScript ESModule imports.
-2. **Widget Safety**: No heavy rendering inside widget classes; confirm layers are composited asynchronously.
+2. **Widget Safety**: No heavy rendering inside widget classes; confirm layers are composited asynchronously. Never compute streak state or fetch mood capsule state inside widget extension.
 3. **Bandwidth Optimization**: Canvas coordinates synced as stroke vectors, never flat images.
 4. **Test Coverage**: Validate that changed files have corresponding unit or integration test assertions.
 5. **No Scope Creep**: Keep changes tightly aligned with the specific active issue or feature.
+6. **CDN Caching**: Trading Card PNGs must not be regenerated on every request; verify cache-invalidation logic only fires on avatar or Room save events.
+7. **Haptic Pattern Limits**: Knock patterns must be validated for max 10 elements and 2000ms total duration before storage.
 '@
 
-# debug
 Write-FileContent ".agents/skills/debug/debug.md" @'
 ---
 name: debug
@@ -179,7 +201,6 @@ This skill handles resolving crashes, layout errors, sync issues, and haptic fai
 4. **Resolve**: Propose the change clearly and update tests to verify it will not regress.
 '@
 
-# write-tests
 Write-FileContent ".agents/skills/write-tests/write-tests.md" @'
 ---
 name: write-tests
@@ -195,9 +216,12 @@ This skill adds test coverage for the clients and sync backend.
 - **Backend APIs**: Use Jest to test REST endpoints and socket sync timelines.
 - **Data Models**: Ensure validations check for invalid JSON coordinate shapes.
 - **Edge cases**: Verify out-of-order websocket coordinate frames are sorted or discarded safely.
+- **Streak TTL**: Test that a streak key set to 25h TTL survives a 24h gap and expires after 25h.
+- **Mood Capsule Expiry**: Test the cron job removes capsules older than 24h and leaves younger ones intact.
+- **Haptic Pattern Validation**: Test rejection of patterns with more than 10 elements or more than 2000ms total duration.
+- **Photo Booth Pipeline**: Test the Metal/RenderScript pixelation output dimensions match Nookie sprite scale.
 '@
 
-# room-builder
 Write-FileContent ".agents/skills/room-builder/room-builder.md" @'
 ---
 name: room-builder
@@ -222,12 +246,16 @@ Room assets are stored as a JSON layout file mapping:
 }
 ```
 
-## Vibe-Casting & Soundscapes
+## Vibe-Casting and Soundscapes
 - Retrieve local weather states asynchronously and map them to visual room overlay states (e.g., rain vectors, snow assets).
 - Play soundscapes through an optimized low-level audio engine that mixes loops client-side.
+
+## Trading Card Wall Art
+- Nookie Trading Cards pinned by friends are treated as special furniture items with `item_type: "trading_card"`.
+- A dedicated card shelf slot in the Room layout (`item_id: "card_shelf_01"`) displays the full friend card collection.
+- Card shelf items reference CDN URLs; never embed raw PNG data in the Room layout JSON.
 '@
 
-# nookie-customizer
 Write-FileContent ".agents/skills/nookie-customizer/nookie-customizer.md" @'
 ---
 name: nookie-customizer
@@ -241,18 +269,23 @@ This skill builds and composites Nookie avatar assets.
 
 ## Layer Composite Constraint
 1. Avatar configuration is saved in SQLite as layer IDs (skin, hair, shirt, pants, accessory).
-2. To prevent memory issues in WidgetKit (max 30MB limit), do **NOT** layer PNG assets dynamically in the widget extension.
-3. Instead, composite them to a flat transparent PNG using Swift's Core Graphics (iOS) or Android's Canvas APIs in the main app lifecycle.
+2. To prevent memory issues in WidgetKit (max 30MB limit), do NOT layer PNG assets dynamically in the widget extension.
+3. Instead, composite them to a flat transparent PNG using Swift Core Graphics (iOS) or Android Canvas APIs in the main app lifecycle.
 4. Save the compiled PNG inside the shared App Group directory. The widget reads the single image directly.
+
+## Trading Card Invalidation
+- Any avatar save event must trigger cache invalidation for the user Trading Card on the CDN.
+- The server generates a fresh 512x512 Trading Card PNG from the new Nookie state plus current Room background and updates the CDN path.
+- Do not regenerate Trading Cards synchronously during avatar save - queue as a background job.
 '@
 
-# widget-interaction
 Write-FileContent ".agents/skills/widget-interaction/widget-interaction.md" @'
 ---
 name: widget-interaction
 description: >
   Manages interactive widget logic, such as Tic-Tac-Toe games, Widget Duet
-  canvases, Nook Pet feed loops, and Vibe-Knock triggers.
+  canvases, Nook Pet feed loops, and Vibe-Knock triggers. Also renders Nook
+  Streaks counter and Mood Capsule emoji stamp on home screen widgets.
 ---
 # Widget Interaction
 
@@ -261,69 +294,238 @@ This skill handles WidgetKit configurations on iOS and AppWidget providers on An
 ## Interactivity Optimization
 1. Widgets must update immediately to clicks. Read and render states from the local cache.
 2. Queue network sync actions as background requests to update remote server states asynchronously.
-3. Rate-limit active push notifications and haptic pings (Vibe-Knocks) to a maximum of 3 notifications/friend/hour to respect battery budgets.
+3. Rate-limit active push notifications and haptic pings (Vibe-Knocks) to a maximum of 3 notifications per friend per hour to respect battery budgets.
+
+## Nook Streaks Widget Rendering
+- The widget reads the streak count from a local cache file written by the main app on every streak update.
+- Never compute streak state inside the widget extension process.
+- Display the streak counter as a live number on the widget face; animate a small flame icon for streaks >= 3 days.
+- If the streak is broken, the Nook Pet on the widget transitions to a sad visual state (use pre-composited sad-pet PNG in shared container).
+
+## Mood Capsule Widget Display
+- The mood capsule emoji is read from a local store key written by the silent push (APNs/FCM) handler in the main app.
+- The widget reads the key at render time; if the key is empty or expired, no emoji is displayed.
+- Never fetch mood capsule state over the network during widget rendering.
+- The server cron job removes expired capsules server-side and sends a silent push to clear the local store key on recipient devices.
 '@
 
-# community-halls
 Write-FileContent ".agents/skills/community-halls/community-halls.md" @'
 ---
 name: community-halls
 description: >
-  Manages thematic public lounge interfaces, room card list updates, and
-  real-time multiplayer Walking Nookie coordinates using WebSocket endpoints.
+  Manages thematic public lounge interfaces, room card list updates, real-time
+  multiplayer Walking Nookie coordinates, Hall Campfire async audio ember flow,
+  and Room of the Week weekly voting and winner reward pipeline.
 ---
 # Community Halls
 
-This skill handles multiplayer lobbies, socket rooms, and walking character state syncs.
+This skill handles multiplayer lobbies, socket rooms, walking character state syncs, async audio embers, and weekly room voting.
 
 ## Concurrency Performance
 - Use Socket.io channels separated by lounge topic.
 - Buffer real-time movements via Redis pub/sub.
 - Broadcast states to clients at a capped rate of 10 FPS to prevent cellular throttling and mobile heat generation.
+
+## Hall Campfire - Async Audio Embers (F-18)
+- Users record a 10-second audio clip (voice or sound effect) inside the Hall.
+- The clip must pass the on-device audio classifier before upload; blocked clips are discarded locally.
+- Approved clips are uploaded as compressed AAC to CDN. The server writes an ember record with expires_at = now() + 24h.
+- Embers are visualized as animated glowing dots in the Hall. Visitors tap a dot to stream directly from CDN (no WebSocket for playback).
+- A server TTL job deletes expired ember records and removes CDN objects after 24h.
+- The audio classifier runs on-device (CoreML on iOS, TensorFlow Lite on Android) before any upload.
+
+## Room of the Week - Weekly Voting (F-16)
+- Any Hall visitor can upvote any Room card once per week. Enforce one-upvote-per-user-per-week in Postgres (unique constraint on user_id + room_id + week_start).
+- week_start is computed as the Monday 00:00 UTC of the current ISO week.
+- A cron job runs every Monday at 00:00 UTC, determines the top-voted Room per Hall, pins it at the lobby top, issues a server-generated IAP token for an exclusive furniture item to the winning Room owner, and resets all vote counts.
+- IAP token generation is handled in src/server/services/iap-token.ts - never hard-code token strings.
 '@
 
-# content-moderation
 Write-FileContent ".agents/skills/content-moderation/content-moderation.md" @'
 ---
 name: content-moderation
 description: >
   Manages local on-device neural network classifiers (CoreML on iOS,
-  TensorFlow Lite on Android) for real-time sketching guardrails.
+  TensorFlow Lite on Android) for real-time sketching guardrails and
+  Hall Campfire audio clip screening.
 ---
 # Content Moderation
 
-This skill handles checking user-submitted whiteboard drawings and widget duets.
+This skill handles checking user-submitted whiteboard drawings, widget duets, and Hall Campfire audio clips.
 
-## On-Device Classifier
+## On-Device Sketch Classifier
 - Drawings must be evaluated locally before dispatching to the sync server.
 - Utilize quantized mobile models (CoreML or TensorFlow Lite) to run classification in under 100ms.
 - Flagged sketches must trigger a local UI block warning without sending contents to public databases.
+
+## On-Device Audio Classifier (Hall Campfire)
+- Before any Campfire audio clip is uploaded to CDN, run it through an on-device audio classifier.
+- The classifier checks for hate speech, NSFW audio, and excessive background noise.
+- Blocked clips are deleted locally and the user is shown an upload-rejected warning.
+- Maximum clip length enforced client-side: 10 seconds. Clips longer than 10s are trimmed before classification.
 '@
 
-Write-Output "[OK] Skills scaffolded"
+Write-FileContent ".agents/skills/retention-engine/retention-engine.md" @'
+---
+name: retention-engine
+description: >
+  Manages Nook Streaks (F-17) consecutive-day widget interaction counter between
+  friend pairs and Mood Capsule (F-20) once-daily emoji mood stamp delivered to
+  close friends via APNs/FCM silent push.
+---
+# Retention Engine
 
-# --- 4. Copy graduation documents -----------------------------
-Copy-Item (Join-Path $IdeaDir "vision.md")            (Join-Path $TargetDir "docs/vision.md") -Force
-Copy-Item (Join-Path $IdeaDir "roadmap.md")           (Join-Path $TargetDir "docs/roadmap.md") -Force
-Copy-Item (Join-Path $IdeaDir "feasibility.md")       (Join-Path $TargetDir "docs/feasibility.md") -Force
-Copy-Item (Join-Path $IdeaDir "profitability.md")     (Join-Path $TargetDir "docs/profitability.md") -Force
-Copy-Item (Join-Path $IdeaDir "agents-blueprint.md")  (Join-Path $TargetDir "docs/agents-blueprint.md") -Force
+This skill owns the variable-reward retention loop: Nook Streaks and Mood Capsule.
+
+## Nook Streaks (F-17)
+
+### How Streaks Work
+- A streak is a per-friendship-pair counter of consecutive days on which at least one widget action occurred.
+- Qualifying actions: Widget Duet move, Nook Pet feed, Tic-Tac-Toe game move, Vibe-Knock sent or received.
+- The streak timer resets (extends by 25h from last action) on any qualifying action.
+
+### Redis Storage
+- Key: streak:{user_a_id}:{user_b_id} (always sort IDs so a < b for canonical key).
+- Value: integer streak count.
+- TTL: 25 hours from last qualifying action. Not 24h. The extra hour gives grace to users whose habit time shifts slightly (e.g. 11pm one night, 12:15am the next).
+- When the TTL expires the key is gone; the streak is broken.
+
+### Client Integration
+- The main app writes the streak count to a shared App Group file / SharedPreferences on every qualifying action and every app foreground.
+- The widget extension reads streak count from that local cache - it never makes a network call to fetch streak state.
+- On streak break: the Nook Pet widget transitions to a pre-composited sad-pet PNG. This PNG must exist in the shared App Group container.
+
+## Mood Capsule (F-20)
+
+### How Mood Capsule Works
+- Once per calendar day, a user picks one emoji from a curated palette (max 64 options).
+- The stamp is sent to all close friends (defined as mutual follows with >= 7-day streak).
+- Delivery is via APNs silent push (iOS) or FCM data message (Android) - no notification sound or banner.
+- The silent push payload writes the emoji and sender metadata to a local store key.
+- The emoji auto-appears on recipients home screen widgets and persists for 24 hours.
+
+### Server-Side Expiry
+- src/server/jobs/mood-capsule-expiry.ts runs as a cron job every hour.
+- The job selects all capsule records where created_at < now() - 24h and deletes them.
+- After deletion, a silent push is sent to each recipient to clear the local store key.
+- Capsule removal is always server-initiated - never rely on client-side timer expiry.
+
+### Constraints
+- One capsule per user per calendar day (UTC). Enforce in Postgres with a partial unique index on user_id + date(created_at AT TIME ZONE UTC).
+- No reply, no text, no interaction from recipients required or supported.
+'@
+
+Write-FileContent ".agents/skills/virality-tools/virality-tools.md" @'
+---
+name: virality-tools
+description: >
+  Manages the Pixel Photo Booth (F-22) in-app camera and fully on-device pixel-art
+  render pipeline, and Nookie Trading Cards (F-19) collectible card generation,
+  CDN hosting, and Room wall-art pinning.
+---
+# Virality Tools
+
+This skill owns the two main virality surfaces: shareable Photo Booth exports and collectible Trading Cards.
+
+## Pixel Photo Booth (F-22)
+
+### Render Pipeline - Fully On-Device
+1. The in-app camera captures a selfie frame.
+2. A Metal fragment shader (iOS) or RenderScript kernel (Android) pixelates the selfie to Nookie sprite scale (downscale then nearest-neighbor upscale).
+3. The current Room background is composited as the bottom layer.
+4. The user Nookie sprite (pre-composited PNG from shared container) is composited as an overlay.
+5. An embedded nook.me/[username] deep-link text overlay is rendered in the top-right corner.
+6. The result is exported as a JPEG to the system share sheet.
+7. Direct share targets: Instagram Stories, TikTok - use their respective share extension APIs.
+
+### Constraints
+- No server round-trip at any point in the pipeline. All compositing is in-memory.
+- The pixelation shader must produce output whose pixel block size matches the Nookie sprite grid unit (e.g. 4px blocks for a 128x128 Nookie on a 512x512 canvas).
+- Never save the selfie to the user camera roll without explicit permission prompt.
+
+## Nookie Trading Cards (F-19)
+
+### Card Generation
+- A Trading Card is a 512x512 PNG compositing the user current Nookie avatar in a rare pose plus the user current Room background.
+- Generation is server-side: src/server/assets/trading-cards/ hosts the generator service.
+- The generator fires only on two events: avatar save and Room save.
+- Generated PNG is uploaded to CDN and the trading_card_url field on the User model is updated.
+- Never regenerate on every request. If trading_card_url is set and neither avatar nor Room has changed, return the existing CDN URL.
+
+### Card Pinning - Room Wall Art
+- Friends pin a Trading Card via a Pin to Room action on the card view.
+- The pinned card is stored as a special furniture item: { item_type: "trading_card", owner_user_id: "...", cdn_url: "..." }.
+- A dedicated card shelf (item_id: "card_shelf_01") in the Room layout displays the full collection.
+- Maximum 8 pinned cards per Room (one shelf slot per card). Enforce client-side and server-side.
+'@
+
+Write-FileContent ".agents/skills/haptic-engine/haptic-engine.md" @'
+---
+name: haptic-engine
+description: >
+  Manages Secret Knock Code (F-23) - the per-friendship unique rhythmic haptic
+  pattern - and extends Vibe-Knocks so every knock pulses in the friendship-specific pattern.
+---
+# Haptic Engine
+
+This skill owns the per-friendship Secret Knock Code and the underlying haptic pattern infrastructure.
+
+## Secret Knock Code (F-23)
+
+### Data Model
+- The knock pattern is stored as knock_pattern: number[] on the Friendship join table in Postgres.
+- The array contains alternating vibrate/pause durations in milliseconds.
+- Example: [100, 50, 200, 50, 100] = 100ms vibrate, 50ms pause, 200ms vibrate, 50ms pause, 100ms vibrate.
+- Maximum 10 elements. Maximum 2000ms total duration. Enforce both limits server-side (Prisma validator) and client-side (UI cap) to prevent abuse.
+- Default pattern if none set: [100, 50, 100].
+
+### iOS Implementation
+- Use CoreHaptics CHHapticEngine.
+- Build a CHHapticPattern from the array: odd indices are vibrate events (CHHapticEvent with eventType .hapticContinuous), even indices are pause gaps.
+- Play the pattern via CHHapticPatternPlayer.
+
+### Android Implementation
+- Use VibrationEffect.createWaveform(timings: LongArray, amplitudes: IntArray, repeat: Int).
+- timings: the knock_pattern array converted to LongArray.
+- amplitudes: alternate between 255 (vibrate) and 0 (pause) matching the pattern length.
+- repeat: -1 (no repeat - play once per knock).
+
+### Tap-to-Record UI
+- Users open the Secret Knock editor from the friendship profile screen.
+- Tapping the record button starts capturing on/off intervals (tap = vibrate, release = pause).
+- Each tap/release pair appends two values to the pattern array.
+- Recording stops automatically at 10 elements or 2000ms total, whichever comes first.
+- The co-edit UI is async: either friend can propose a new pattern; the other friend sees a New knock pattern proposed prompt and can accept or keep the existing one.
+
+### Vibe-Knock Integration
+- All Vibe-Knocks must play the friendship-specific knock pattern, not a generic buzz.
+- The pattern is cached locally (UserDefaults/SharedPreferences keyed by friendship_id) so the widget can play it without a network call.
+- Pattern cache is refreshed whenever the friendship profile is opened or a pattern-change push is received.
+'@
+
+Write-Host "[OK] Skills scaffolded (13 total: 4 core + 9 product-specific)"
+
+# ── 4. Copy graduation documents ──────────────────────────────────────────────
+Copy-Item (Join-Path $IdeaDir "vision.md")           (Join-Path $Target "docs/vision.md") -Force
+Copy-Item (Join-Path $IdeaDir "roadmap.md")          (Join-Path $Target "docs/roadmap.md") -Force
+Copy-Item (Join-Path $IdeaDir "feasibility.md")      (Join-Path $Target "docs/feasibility.md") -Force
+Copy-Item (Join-Path $IdeaDir "profitability.md")    (Join-Path $Target "docs/profitability.md") -Force
+Copy-Item (Join-Path $IdeaDir "agents-blueprint.md") (Join-Path $Target "docs/agents-blueprint.md") -Force
 if (Test-Path (Join-Path $IdeaDir "synthesis.md")) {
-    Copy-Item (Join-Path $IdeaDir "synthesis.md")     (Join-Path $TargetDir "docs/synthesis.md") -Force
+    Copy-Item (Join-Path $IdeaDir "synthesis.md") (Join-Path $Target "docs/synthesis.md") -Force
 }
-Write-Output "[OK] Graduation documents copied to docs/"
+Write-Host "[OK] Graduation documents copied to docs/"
 
-# --- 5. Write ADR files ---------------------------------------
+# ── 5. Write ADR files ────────────────────────────────────────────────────────
 
-# ADR 001
 Write-FileContent "docs/decisions/001-spatial-social-pivot.md" @'
 # ADR 001 - Spatial Social Pivot
 
-**Date:** 2026-06-20  
-**Status:** Accepted  
+**Date:** 2026-06-20
+**Status:** Accepted
 
 ## Context
-The initial concept (VibeWidget) was scoped as a private home-screen drawing utility between friends. However, utility widgets have low long-term user retention, low monetization ceilings, and high user churn. 
+The initial concept (VibeWidget) was scoped as a private home-screen drawing utility between friends. However, utility widgets have low long-term user retention, low monetization ceilings, and high user churn.
 
 ## Decision
 We pivoted to a complete spatial social network called Nook. Instead of static feeds or list-based bios, every user has an interactive 2D pixel-art room. Users can dress a modular 2D pixel character ("Nookie") and browse public themed Community Halls (Anime Lounges, Music Lobbies) to meet others and share their rooms.
@@ -339,18 +541,17 @@ We pivoted to a complete spatial social network called Nook. Instead of static f
 - Expands target platform footprint, requiring robust client implementations on both iOS and Android.
 '@
 
-# ADR 002
 Write-FileContent "docs/decisions/002-async-widget-cache.md" @'
 # ADR 002 - Asynchronous Widget Caching
 
-**Date:** 2026-06-20  
-**Status:** Accepted  
+**Date:** 2026-06-20
+**Status:** Accepted
 
 ## Context
 Interactive iOS WidgetKit and Android AppWidget taps trigger asynchronous updates. If actions rely on synchronous network responses, OS timeline reload rates will trigger rendering delays, lagging up to 2 seconds and making widget gameplay or drawing feel slow and broken.
 
 ## Decision
-Maintain all active widget states (Tic-Tac-Toe cells, Pet feeding levels, blackboard paths) in a local SQL/JSON cache in the shared App Group directory. When clicked, instantly render update changes directly from the cache, then schedule background sync jobs to update the backend database.
+Maintain all active widget states (Tic-Tac-Toe cells, Pet feeding levels, blackboard paths, streak counts, mood capsule emojis) in a local SQL/JSON cache in the shared App Group directory. When clicked, instantly render update changes directly from the cache, then schedule background sync jobs to update the backend database.
 
 ## Rationale
 Ensures responsiveness stays under 150ms regardless of active cellular connectivity, preventing OS-level widget background task kills and network timeouts.
@@ -360,18 +561,17 @@ Ensures responsiveness stays under 150ms regardless of active cellular connectiv
 - Requires setup of native mobile background tasks and local DB triggers on widgets.
 '@
 
-# ADR 003
 Write-FileContent "docs/decisions/003-on-device-moderation.md" @'
 # ADR 003 - On-Device Safety Checks
 
-**Date:** 2026-06-20  
-**Status:** Accepted  
+**Date:** 2026-06-20
+**Status:** Accepted
 
 ## Context
-Nook enables users to draw blackboard sketches and share Widget Duets on friends' home screens. Allowing unfiltered inputs risks leaking NSFW content to home widgets, violating Apple and Google App Store safety guidelines.
+Nook enables users to draw blackboard sketches, share Widget Duets on friends home screens, and drop audio embers in Community Halls. Allowing unfiltered inputs risks leaking NSFW content to home widgets, violating Apple and Google App Store safety guidelines.
 
 ## Decision
-Implement a local on-device neural network classifier using CoreML (iOS) and TensorFlow Lite (Android). All drawings must run through the model locally before save actions complete.
+Implement local on-device neural network classifiers using CoreML (iOS) and TensorFlow Lite (Android). All drawings must run through the sketch classifier locally before save actions complete. All Campfire audio clips must run through an audio classifier locally before upload to CDN.
 
 ## Rationale
 1. **Compliance**: Guarantees zero latency moderation without server roundtrips, allowing immediate blocking.
@@ -381,24 +581,24 @@ Implement a local on-device neural network classifier using CoreML (iOS) and Ten
 ## Consequences
 - Classifier model weight updates must be bundled inside client application updates.
 - Drawing inputs must be flattened client-side for classification.
+- Audio clips require a separate on-device audio classifier model bundle.
 '@
 
-# ADR 004
 Write-FileContent "docs/decisions/004-vector-stroke-sync.md" @'
 # ADR 004 - Vector Stroke Synchronization
 
-**Date:** 2026-06-20  
-**Status:** Accepted  
+**Date:** 2026-06-20
+**Status:** Accepted
 
 ## Context
 Rendering blackboard sketches or duets as rasterized image uploads (PNG/JPEG) consumes substantial client upload bandwidth and server storage capacity. It also prevents interactive animations like step-by-step vector playbacks.
 
 ## Decision
-Synchronize drawings as JSON coordinate arrays: `[{x: float, y: float, t: number, p: boolean}]`.
+Synchronize drawings as JSON coordinate arrays: [{x: float, y: float, t: number, p: boolean}].
 
 ## Rationale
 1. **Size**: An average doodle vector size is under 20KB, compared to a 300KB rasterized image file.
-2. **Playback**: Replays drawing animations by drawing strokes progressively based on timestamp `t`.
+2. **Playback**: Replays drawing animations by drawing strokes progressively based on timestamp t.
 3. **Storage**: Vector points fit inside PostgreSQL/Redis databases easily, reducing layout lookup time.
 
 ## Consequences
@@ -406,18 +606,17 @@ Synchronize drawings as JSON coordinate arrays: `[{x: float, y: float, t: number
 - Stroke arrays must be validated for max array lengths to prevent payload injection attempts.
 '@
 
-# ADR 005
 Write-FileContent "docs/decisions/005-pre-composited-sprites.md" @'
 # ADR 005 - Pre-Composited Sprite Sheets
 
-**Date:** 2026-06-20  
-**Status:** Accepted  
+**Date:** 2026-06-20
+**Status:** Accepted
 
 ## Context
 Apple iOS Widget Extensions enforce a strict 30MB RAM cap. Rendering layered pixel-art transparent sprites (body + hair + shirt + pants + accessory + pet) dynamically in real-time inside the widget process frequently triggers Out-Of-Memory (OOM) extension crashes.
 
 ## Decision
-Composite the modular character outfits into flat transparent PNG files inside the main app's lifecycle or a background task. Write the compiled PNG to the Shared App Group directory.
+Composite the modular character outfits into flat transparent PNG files inside the main app lifecycle or a background task. Write the compiled PNG to the Shared App Group directory.
 
 ## Rationale
 The widget extension reads and displays a single pre-rendered PNG from local disk storage, keeping peak RAM execution under 2MB.
@@ -427,18 +626,136 @@ The widget extension reads and displays a single pre-rendered PNG from local dis
 - Demands file sync queues between the main app workspace and widget bundle folders.
 '@
 
-Write-Output "[OK] Architecture decision records written"
+Write-FileContent "docs/decisions/006-retention-loop-design.md" @'
+# ADR 006 - Retention Loop Design: Streaks and Mood Capsule at MVP
 
-# --- 6. Write README.md ---------------------------------------
+**Date:** 2026-06-20
+**Status:** Accepted
+
+## Context
+A feasibility refresh identified that the original ambient-only design (rooms, widgets, halls) provides no explicit pull-back trigger after a user lapses. Without a legible reward loop, D7 retention is projected to collapse below 15% - insufficient for social app economics. The assumption challenger flagged this as the single highest-risk behavioural gap.
+
+## Decision
+Add two explicit variable-reward retention mechanics at MVP tier (must ship at launch):
+
+1. **Nook Streaks (F-17)**: Consecutive-day widget interaction counter per friendship pair. Stored as a Redis key with 25-hour TTL (not 24h - the extra hour gives grace for late-night users whose habit time shifts slightly). Any qualifying widget action resets the timer. Breaking the streak makes the Nook Pet visually sad on the widget.
+
+2. **Mood Capsule (F-20)**: Once-daily emoji mood stamp. Delivered to close friends via APNs/FCM silent push. Persists 24h then removed by a server-scheduled cron job - not a client-side timer. No interaction required from recipients.
+
+## Rationale
+- Streaks create a daily pull-back pressure without requiring content creation.
+- Mood Capsule creates ambient emotional presence between friends passively - no cognitive load.
+- Both mechanics are compatible with the ambient/asynchronous design principle (no direct text chat).
+
+## Consequences
+- Streak TTL must be 25h, not 24h - any implementation using 24h is incorrect.
+- Mood capsule expiry is always server-initiated; client-side timer approaches are disallowed.
+- The retention-engine skill owns both mechanics.
+'@
+
+Write-FileContent "docs/decisions/007-hall-campfire-async-audio.md" @'
+# ADR 007 - Hall Campfire: Async Audio Instead of Live Audio Rooms
+
+**Date:** 2026-06-20
+**Status:** Accepted
+
+## Context
+Community Halls need to feel populated and warm, but at sub-100K DAU the concurrent presence in any given Hall at any given time will typically be fewer than 5 users. A live audio room with 0-2 people present would feel empty and broken, defeating the purpose of the feature.
+
+## Decision
+Implement Hall Campfire (F-18) as an async audio ember system rather than a live audio room:
+- Users drop 10-second audio clips ("embers") that persist for 24h.
+- Embers are stored as compressed AAC on CDN.
+- Visitors stream embers directly from CDN on tap - no WebSocket involved for audio playback.
+- Embers expire via server TTL job after 24h.
+- On-device audio classifier screens clips before upload.
+
+## Rationale
+- Async embers make Halls feel populated even with zero concurrent presence.
+- CDN streaming for a 10s clip is cheaper and more reliable than a WebRTC/WebSocket audio stream.
+- The 24h TTL keeps the soundscape fresh without manual curation.
+
+## Consequences
+- No real-time voice or conversation is supported - this is intentional and consistent with the async-first design philosophy.
+- Campfire audio moderation is entirely on-device; server has no audio moderation pipeline.
+- The community-halls skill owns the ember upload/stream/expire flow.
+'@
+
+Write-FileContent "docs/decisions/008-pixel-art-validation-gate.md" @'
+# ADR 008 - Pixel Art Aesthetic Must Be Validated Before Asset Production
+
+**Date:** 2026-06-20
+**Status:** Accepted
+
+## Context
+The assumption challenger surfaced a significant risk: Gen Z 18-24 cohort may skew toward 3D/Y2K aesthetics (Bitmoji-style) or anime/Zepeto-style visuals rather than retro 8-bit pixel art. If the wrong art direction is chosen, the monetizable cohort (users willing to pay for cosmetics) could collapse before a pivot is feasible.
+
+Commissioning a pixel artist and building the full asset catalog before validating this preference would waste 3-6 weeks of production and Rs 30,000-80,000 in art budget.
+
+## Decision
+Phase 0 of the project must include a paid split-test advertisement before any pixel artist is commissioned or the asset catalog begins production.
+
+**Split-test design:**
+- Platform: Instagram Reels + TikTok ads
+- Budget: Rs 1,500 total (approximately $18 USD)
+- Creatives: 3 variants: (A) pixel art 8-bit, (B) Bitmoji-style 3D cartoon, (C) Zepeto-style anime
+- Metric: swipe-up / link-tap rate to a landing page with "Join Waitlist" CTA
+- Decision threshold: proceed with pixel art only if variant A achieves >= 1.5x the CTR of both B and C
+
+## Rationale
+A Rs 1,500 ad test can resolve a Rs 30,000-80,000 risk. Falsifying this assumption early is cheaper than discovering it post-production.
+
+## Consequences
+- No pixel art assets should be commissioned until this test is complete and variant A wins.
+- If variant A does not win, the product team must reassess the visual direction before proceeding.
+- The docs/decisions/ folder should be updated with test results once available.
+'@
+
+Write-FileContent "docs/decisions/009-on-device-photo-booth.md" @'
+# ADR 009 - Pixel Photo Booth: Fully On-Device Render Pipeline
+
+**Date:** 2026-06-20
+**Status:** Accepted
+
+## Context
+The Pixel Photo Booth feature (F-22) composites a pixelated selfie, Nookie sprite, and Room background into a shareable image for Instagram Stories and TikTok. Three architectural options were considered:
+
+1. Server-side processing: client uploads selfie, server returns composited image.
+2. Hybrid: client pixelates, server composites Nookie + Room background.
+3. Fully on-device: client does all steps in-memory, no server round-trip.
+
+## Decision
+Fully on-device render pipeline (option 3):
+- Metal fragment shader (iOS) / RenderScript kernel (Android) pixelates the selfie to Nookie sprite scale.
+- Nookie sprite (pre-composited PNG from shared container) is overlaid in-memory.
+- Room background (cached locally) is composited as the bottom layer.
+- Result is exported as JPEG directly to the OS share sheet.
+- An embedded nook.me/[username] deep-link overlay is rendered as a text layer.
+
+## Rationale
+- **Latency**: Server round-trip adds 500ms-2s; on-device compositing takes < 200ms.
+- **Privacy**: Selfie never leaves the device. This is a strong user-trust signal for a Gen Z audience.
+- **Cost**: Zero server compute cost for the feature at any scale.
+- **Reliability**: Works offline and in low-connectivity environments.
+
+## Consequences
+- Metal and RenderScript expertise required in mobile client teams.
+- Room background must be cached locally and kept in sync with the server Room state.
+- Nookie sprite must be pre-composited and available in the shared App Group container.
+'@
+
+Write-Host "[OK] Architecture decision records written (ADRs 001-009)"
+
+# ── 6. Write README.md ────────────────────────────────────────────────────────
 Write-FileContent "README.md" @'
 # Nook
 
-A virtual room-based spatial social network for Gen Z featuring customizable pixel-art rooms, personalized pixel avatars ("Nookies"), interactive widget pets, and haptic widget communication.
+A virtual room-based spatial social network for Gen Z featuring customizable pixel-art rooms, personalized pixel avatars ("Nookies"), interactive widget pets, haptic widget communication, friend streaks, mood capsules, trading cards, and a Pixel Photo Booth.
 
 ## Codebase Structure
-- `src/client-ios/` - Native Swift iOS client (WidgetKit, SwiftUI, Metal)
-- `src/client-android/` - Native Kotlin Android client (Glance, Compose)
-- `src/server/` - TypeScript Node.js sync server (WebSockets, Redis, Prisma)
+- `src/client-ios/` - Native Swift iOS client (WidgetKit, SwiftUI, Metal, CoreHaptics)
+- `src/client-android/` - Native Kotlin Android client (Glance, Compose, VibrationEffect)
+- `src/server/` - TypeScript Node.js sync server (WebSockets, Redis, Prisma, cron jobs)
 - `docs/` - Product designs, specifications, and architecture decisions
 
 ## Dev Setup
@@ -452,53 +769,82 @@ Or open this folder in the Antigravity CLI and type:
 - [Vision](docs/vision.md) - Product requirements and goals
 - [Roadmap](docs/roadmap.md) - Sprints and feature classification
 - [Feasibility](docs/feasibility.md) - Technical risks and mitigations
-- [Architecture Decisions](docs/decisions/) - ADR catalog
+- [Architecture Decisions](docs/decisions/) - ADR catalog (001-009)
+
+## Skills
+| Skill | Owns |
+|---|---|
+| `dev-setup` | Environment setup, dependencies, onboarding |
+| `code-review` | PR review, conventions, test coverage |
+| `debug` | Log tracing, root cause analysis |
+| `write-tests` | Unit + integration tests |
+| `room-builder` | 2D grid editor, furniture, soundscapes, trading card wall art |
+| `nookie-customizer` | Avatar layers, sprite compositing, trading card invalidation |
+| `widget-interaction` | AppIntents, games, streaks widget, mood capsule widget |
+| `community-halls` | Socket.io lobbies, Hall Campfire audio, Room of the Week voting |
+| `content-moderation` | On-device sketch + audio classifiers |
+| `retention-engine` | Nook Streaks (F-17), Mood Capsule (F-20) |
+| `virality-tools` | Pixel Photo Booth (F-22), Nookie Trading Cards (F-19) |
+| `haptic-engine` | Secret Knock Code (F-23), Vibe-Knocks haptic patterns |
 
 ## Contributing
 Commit format must follow semver scopes:
 `[ios]`, `[android]`, `[server]`, `[docs]`, `[test]`.
 '@
-Write-Output "[OK] README.md written"
+Write-Host "[OK] README.md written"
 
-# --- 7. Write .env.example ------------------------------------
+# ── 7. Write .env.example ─────────────────────────────────────────────────────
 Write-FileContent ".env.example" @'
 # Nook - Environment Variables
 # Copy to .env and fill in values. Never commit .env.
 
 # Server Configuration
 PORT=8080
-NODE_ENV=development
+APP_ENV=development
 
 # Core Databases
-DATABASE_URL="postgresql://postgres:password@localhost:5400/nook?schema=public"
+DATABASE_URL="postgresql://postgres:password@localhost:5432/nook?schema=public"
 REDIS_URL="redis://localhost:6379"
 
 # Security
-JWT_SECRET="generate-a-secure-secret-token"
+JWT_SECRET="generate-a-secure-secret-token-min-32-chars"
 
-# External APIs
-SPOTIFY_CLIENT_ID="your-spotify-client-id"
-SPOTIFY_CLIENT_SECRET="your-spotify-client-secret"
-
-# Vector Moderation Database (Pinecone)
-PINECONE_API_KEY="your-pinecone-api-key"
-PINECONE_ENVIRONMENT="your-pinecone-environment-region"
-
-# Notification Services
+# Apple Push Notification Service (APNs)
 APNS_KEY_ID="your-apple-push-key-id"
 APNS_TEAM_ID="your-apple-developer-team-id"
-FCM_SERVER_KEY="your-firebase-cloud-messaging-key"
-'@
-Write-Output "[OK] .env.example written"
+APNS_AUTH_KEY="your-apns-auth-key-p8-contents"
 
-# --- 8. Git init ----------------------------------------------
+# Firebase Cloud Messaging (Android)
+FCM_SERVER_KEY="your-firebase-cloud-messaging-server-key"
+
+# Music APIs
+SPOTIFY_CLIENT_ID="your-spotify-client-id"
+SPOTIFY_CLIENT_SECRET="your-spotify-client-secret"
+APPLE_MUSIC_KEY="your-apple-music-developer-token"
+
+# CDN (for avatar assets, trading cards, campfire audio)
+CDN_BASE_URL="https://cdn.yournookapp.com"
+CDN_BUCKET_NAME="nook-assets"
+CDN_ACCESS_KEY="your-cdn-access-key"
+CDN_SECRET_KEY="your-cdn-secret-key"
+
+# Safety / Child Protection
+NCMEC_API_KEY="your-ncmec-api-key"
+
+# On-Device Model Versioning
+CORML_MODEL_VERSION="1.0.0"
+TFLITE_MODEL_VERSION="1.0.0"
+'@
+Write-Host "[OK] .env.example written"
+
+# ── 8. Git init ───────────────────────────────────────────────────────────────
 $CurrentDir = Get-Location
 try {
-    Set-Location $TargetDir
+    Set-Location $Target
     git init -q
     git add .
-    git commit -q -m "init: bootstrap from idea-lab graduation"
-    Write-Output "[OK] Git initialized - initial commit made"
+    git commit -q -m "init: bootstrap nook build repo from idea-lab graduation"
+    Write-Host "[OK] Git initialized - initial commit made"
 }
 catch {
     Write-Warning "Failed to initialize Git in target directory: $_"
@@ -507,16 +853,18 @@ finally {
     Set-Location $CurrentDir
 }
 
-# --- Summary --------------------------------------------------
-Write-Output ""
-Write-Output "========================================"
-Write-Output "  $RepoName is ready at $TargetDir"
-Write-Output "========================================"
-Write-Output ""
-Write-Output "Next steps:"
-Write-Output "  1. cd $TargetDir"
-Write-Output "  2. Create the GitHub repo and push: gh repo create $RepoName --private && git push -u origin main"
-Write-Output "  3. Fill in .env from .env.example"
-Write-Output "  4. Spike on the highest-risk dependency (see docs/roadmap.md - Phase 0)"
-Write-Output "  5. Open in Antigravity and say: 'set up the dev environment'"
-Write-Output ""
+# ── Summary ───────────────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "================================================"
+Write-Host "  $RepoName is ready at $Target"
+Write-Host "================================================"
+Write-Host ""
+Write-Host "Next steps:"
+Write-Host "  1. cd $Target"
+Write-Host "  2. Create the GitHub repo and push:"
+Write-Host "     gh repo create $RepoName --private; git push -u origin main"
+Write-Host "  3. Fill in .env from .env.example"
+Write-Host "  4. Run Phase 0 pixel art split-test before commissioning art (see ADR 008)"
+Write-Host "  5. Spike on highest-risk dependency (see docs/roadmap.md Phase 0)"
+Write-Host "  6. Open in Antigravity and say: 'set up the dev environment'"
+Write-Host ""
