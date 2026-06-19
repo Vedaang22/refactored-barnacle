@@ -18,7 +18,7 @@ The workflow is opinionated on purpose. Every idea goes through the same pipelin
 
 ### The agent does the heavy lifting
 
-This repo is wired for [Antigravity CLI](https://antigravity.google) (`agy`). Open the repo in your terminal and just talk to it:
+This repo works with **Antigravity CLI** (primary) and **Claude Code** (drop-in alternative). Open the repo in your terminal and just talk to it:
 
 ```
 "I have a new idea — [describe it]"
@@ -29,6 +29,16 @@ This repo is wired for [Antigravity CLI](https://antigravity.google) (`agy`). Op
 ```
 
 The agent reads `AGENTS.md` and the skills in `.agents/skills/` and knows exactly what to do. You don't invoke skills by name — just describe what you want and it picks the right one. For multi-step work (e.g. "run the full pipeline on this idea"), it spawns parallel subagents automatically via the `orchestrator` skill.
+
+### Setting up your tool
+
+**Antigravity CLI** — works out of the box. `AGENTS.md` is read automatically.
+
+**Claude Code** — run once after cloning:
+```bash
+ln -s AGENTS.md CLAUDE.md
+```
+That symlink is the only setup step. Claude Code reads `CLAUDE.md`; the symlink points it at `AGENTS.md`. Single source of truth, no duplication. Subagent configs in `.claude/agents/` are already committed and ready.
 
 ### The one rule to remember
 
@@ -43,7 +53,10 @@ After every session, glance at the `status.md` in the idea folder you worked on.
 ├── README.md               ← you are here
 ├── AGENTS.md               ← agent instructions (don't edit unless you know what you're doing)
 ├── .agents/
-│   └── skills/             ← all 13 skills loaded by the agent
+│   └── skills/             ← all 13 skills (Antigravity + Claude Code)
+├── .claude/
+│   └── agents/             ← Claude Code subagent configs (4 files)
+│                             (symlink CLAUDE.md → AGENTS.md to activate)
 ├── ideas/                  ← one folder per idea
 │   └── [idea-name]/
 │       ├── README.md       ← idea brief: what it is, who it's for, key assumptions

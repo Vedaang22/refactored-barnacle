@@ -11,6 +11,39 @@ This repository is a structured workspace for generating, stress-testing, and ev
 
 This repo is **pre-product**. No production code lives here. The outputs are documents, models, diagrams, and structured notes.
 
+
+## Tool Compatibility
+
+This repo is configured for **Antigravity CLI** as the primary tool.
+**Claude Code** is supported as a drop-in alternative with no content changes.
+
+### Using with Antigravity CLI
+Open the repo and talk to it. `AGENTS.md` is read automatically. Skills in
+`.agents/skills/` are loaded by description at startup.
+
+### Using with Claude Code
+Run this once after cloning:
+```bash
+ln -s AGENTS.md CLAUDE.md
+```
+That's it. Claude Code reads `CLAUDE.md` and will find everything via the
+symlink. No content duplication, single source of truth.
+
+Subagents for Claude Code live in `.claude/agents/` — these are pre-configured
+and committed to the repo. The four parallel-context subagents (`market-researcher`,
+`assumption-challenger`, `idea-connector`, `status-reporter`) have proper
+Claude Code YAML frontmatter with model selection and tool restrictions.
+
+Skills in `.agents/skills/` have enriched frontmatter (`allowed-tools`, `model`,
+`context: fork`) that Claude Code reads natively. Antigravity ignores these
+extra fields — fully backward compatible.
+
+### Switching between tools mid-session
+No changes needed. Both tools read the same skill content. The only structural
+difference is how subagents are spawned:
+- **Antigravity:** prose delegation (`In a subagent: ... Use the X skill`)
+- **Claude Code:** Task tool + `.claude/agents/` config files (pre-built)
+
 ## Repo Layout
 ```
 /ideas/                   # One folder per idea, named kebab-case
