@@ -43,7 +43,7 @@ After every session, glance at the `status.md` in the idea folder you worked on.
 ├── README.md               ← you are here
 ├── AGENTS.md               ← agent instructions (don't edit unless you know what you're doing)
 ├── .agents/
-│   └── skills/             ← all 11 skills loaded by the agent
+│   └── skills/             ← all 13 skills loaded by the agent
 ├── ideas/                  ← one folder per idea
 │   └── [idea-name]/
 │       ├── README.md       ← idea brief: what it is, who it's for, key assumptions
@@ -138,25 +138,33 @@ Seed → Analysis → Synthesis → Roadmap → Graduated
 ---
 
 ### 🚀 Stage 5 — Graduation
-**What happens:** The idea moves to its own dedicated build repository.
+**What happens:** The idea moves to its own dedicated build repository. Graduation is a four-step pipeline run by the `repo-graduation` skill — it won't let you rush through.
 
-**The graduation checklist** (all must pass before graduating):
-- [ ] README exists with clear one-liner and defined target user
-- [ ] At least 3 key assumptions documented
-- [ ] MVP scope locked and agreed by both collaborators
-- [ ] Feasibility verdict is 🟢 or 🟡 (not 🔴)
-- [ ] All 🔴 risks have a mitigation plan
-- [ ] Profitability model exists with stated assumptions
-- [ ] LTV:CAC ratio > 3:1 or a clear path to it is documented
-- [ ] Feature inventory complete, MVP features agreed and locked
-- [ ] Dependency map drawn, critical path identified
-- [ ] Phase 0 tasks are specific enough to start tomorrow
-- [ ] Both collaborators agree to build this
-- [ ] A named owner is assigned to the new repo
+**Step 1 — Checklist:** Every item below must pass. One ❌ stops the process.
+- README with clear one-liner and target user ✓
+- Feasibility verdict 🟢 or 🟡 with mitigations for all 🔴 risks ✓
+- Profitability model with LTV:CAC > 3:1 or path to it ✓
+- Feature inventory complete, MVP scope locked ✓
+- Dependency map and critical path drawn ✓
+- Phase 0 tasks specific enough to assign tomorrow ✓
+- Both collaborators explicitly agree to build ✓
 
-**Output:** A `graduation-handoff.md` containing the new repo's suggested name, description, folder structure, a fresh lean `AGENTS.md` for the build repo, a first-week checklist, key decisions made in this repo, and what was explicitly ruled out.
+**Step 2 — Vision doc:** The `graduation-vision` skill reads all idea files and synthesizes them into `vision.md` — the canonical document defining the product's features, design principles, success metrics, competitive positioning, and what it explicitly is not. **Human-validated before proceeding.**
+
+**Step 3 — Blueprint + Bootstrap:** The `graduation-blueprint` skill generates two things:
+- `agents-blueprint.md` — every agent and skill the build repo needs, with rationale and spec for each, derived from the roadmap's feature areas and tech stack
+- `bootstrap.sh` — a fully populated shell script. Run it once and the new repo exists: correct folder structure for the tech stack, `AGENTS.md` written, all skills scaffolded with real content, graduation docs copied to `docs/`, ADR files for every key decision, `.env.example` with every external dependency, initial git commit done.
+
+**Step 4 — Archive:** Idea folder moves to `/archive/graduated/[name]/`. `status.md` updated. Done.
 
 **How to trigger:** "Is [idea] ready to graduate?" or "Graduate [idea]."
+
+**To bootstrap the new repo after graduation:**
+```bash
+bash archive/graduated/[idea-name]/bootstrap.sh
+# or to a custom path:
+bash archive/graduated/[idea-name]/bootstrap.sh ~/projects/my-product
+```
 
 ---
 
@@ -188,7 +196,9 @@ The idea folder moves to `/archive/killed/[name]/` with a final `status.md` entr
 | `idea-synthesis` | Compatibility analysis and integration/merge decision for two or more ideas | Inline |
 | `feature-roadmapping` | Feature inventory, dependency map, critical path, phased rollout | Inline |
 | `status-reporter` | Dashboard of all ideas: stage, blockers, suggested focus | Subagent |
-| `repo-graduation` | Graduation checklist + full handoff package for the new build repo | Inline |
+| `repo-graduation` | Runs the full 4-step graduation pipeline — orchestrates the two skills below | Inline |
+| `graduation-vision` | Synthesizes all idea docs into a canonical product vision document | Subagent (spawned by graduation) |
+| `graduation-blueprint` | Generates the agents/skills spec + a runnable `bootstrap.sh` for the new repo | Subagent (spawned by graduation) |
 
 ---
 
@@ -229,13 +239,15 @@ By the time an idea reaches graduation, you have:
 1. **A clear problem statement** with a named target user and validated assumptions
 2. **A market reality check** — real competitors, real TAM data, real pricing benchmarks
 3. **A financial model** — unit economics with explicit assumptions you've stress-tested
-4. **A stress-tested risk register** — the 5 most dangerous assumptions and how to validate them
+4. **A stress-tested risk register** — the 5 most dangerous assumptions and how to validate them cheaply
 5. **A locked MVP scope** — what's in, what's out, and why
 6. **A dependency map** — what blocks what, no surprises on day one
 7. **A critical path** — the exact sequence to get to something shippable
 8. **A phased rollout plan** — Phase 0 tasks specific enough to start tomorrow
-9. **A handoff document** — new repo structure, AGENTS.md, first-week issue list
-10. **A record of what was ruled out** — so you don't relitigate decisions that were already made
+9. **`vision.md`** — the canonical product document: features, design principles, success metrics, positioning, and what the product explicitly is not. Human-validated before graduation completes.
+10. **`agents-blueprint.md`** — every agent and skill the build repo needs, specs derived from your actual feature areas and tech stack
+11. **`bootstrap.sh`** — run once and the build repo exists: correct folder structure, AGENTS.md written, skills scaffolded with real content, all docs migrated, ADR files for every key decision, `.env.example` populated, first git commit done
+12. **A record of what was ruled out** — so you don't relitigate decisions that were already made
 
 ---
 

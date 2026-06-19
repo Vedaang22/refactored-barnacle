@@ -13,17 +13,23 @@ This repo is **pre-product**. No production code lives here. The outputs are doc
 
 ## Repo Layout
 ```
-/ideas/             # One folder per idea, named kebab-case
+/ideas/                   # One folder per idea, named kebab-case
   /[idea-name]/
-    README.md       # Idea brief (auto-generated from idea-capture skill)
-    feasibility.md  # Feasibility analysis
-    profitability.md
-    synthesis.md    # Cross-idea linkage notes
-    roadmap.md
-    status.md       # Current stage + decision log
-/combined/          # Multi-idea synthesis documents
-/templates/         # Blank templates for each doc type
-/archive/           # Killed or paused ideas
+    README.md             # Idea brief (auto-generated from idea-capture skill)
+    feasibility.md        # Feasibility analysis
+    profitability.md      # Unit economics model
+    synthesis.md          # Cross-idea linkage notes (if applicable)
+    roadmap.md            # Feature plan, dependency map, critical path
+    status.md             # Current stage + decision log
+    vision.md             # Generated at graduation — canonical product doc
+    agents-blueprint.md   # Generated at graduation — agent/skill spec for build repo
+    bootstrap.sh          # Generated at graduation — run to create the build repo
+    graduation-handoff.md # Generated at graduation — decisions, ruled-out, open questions
+/combined/                # Multi-idea synthesis documents
+/templates/               # Blank versions of each doc type
+/archive/
+  /killed/                # Ideas explicitly ruled out (with documented reasons)
+  /graduated/             # Ideas that moved to their own build repo
 ```
 
 ## Idea Lifecycle Stages
@@ -31,8 +37,10 @@ This repo is **pre-product**. No production code lives here. The outputs are doc
 2. **Analysis** — Feasibility + profitability assessed
 3. **Synthesis** — Cross-idea compatibility checked
 4. **Roadmap** — Features, dependencies, rollout sequenced
-5. **Graduated** — Moved to its own repo (see repo-graduation skill)
-6. **Archived** — Parked or killed with reason documented
+5. **Graduated** — Full pipeline complete; vision, blueprint, and bootstrap generated; moved to `/archive/graduated/`
+6. **Archived (killed)** — Parked or killed with reason documented; moved to `/archive/killed/`
+
+The distinction matters for agents: `archive/graduated/` folders still have a runnable `bootstrap.sh`. `archive/killed/` folders are read-only reference — never modify them.
 
 ## Agent Behavior Guidelines
 
@@ -67,7 +75,14 @@ Skills live in `.agents/skills/`. The agent loads name + description at startup 
 |---|---|
 | `idea-capture` | Capturing a new idea, writing a brief, initial scoping |
 | `feasibility-analysis` | Assessing technical/market/operational feasibility |
+| `market-researcher` | Competitor research, TAM, pricing benchmarks (runs in subagent) |
+| `assumption-challenger` | Adversarial stress-test of hidden assumptions (runs in subagent) |
 | `profitability-modeling` | Unit economics, margins, revenue models, break-even |
+| `idea-connector` | Scanning all ideas for connections to a target idea (runs in subagent) |
 | `idea-synthesis` | Combining ideas, cross-idea integration, compatibility checks |
 | `feature-roadmapping` | Feature lists, dependency graphs, rollout sequencing |
-| `repo-graduation` | Deciding if an idea is ready for its own repo, graduation checklist |
+| `status-reporter` | Dashboard of all ideas — stage, blockers, next actions (runs in subagent) |
+| `orchestrator` | Multi-step or parallel tasks — fans out into subagents automatically |
+| `repo-graduation` | Full graduation pipeline — checklist, vision, blueprint, bootstrap, archive |
+| `graduation-vision` | Generates vision.md at graduation (spawned by repo-graduation) |
+| `graduation-blueprint` | Generates agents-blueprint.md + bootstrap.sh at graduation (spawned by repo-graduation) |

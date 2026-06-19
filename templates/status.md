@@ -1,43 +1,40 @@
-# Idea Status: [Idea Name]
+# Status — [Idea Name]
 
-## Current Status
-- **Current Stage**: Seed / Analysis / Synthesis / Roadmap / Graduated / Archived
-- **Last Updated**: [YYYY-MM-DD]
-- **Primary Owner**: [User/Agent]
+**Current Stage:** Seed | Analysis | Synthesis | Roadmap | Graduated | Archived (killed)
 
 ---
 
-## Decision & Lifecycle Log
+## Stage History
 
-| Date | Stage | Action / Decision | Owner | Notes / Key Takeaways |
-| :--- | :--- | :--- | :--- | :--- |
-| YYYY-MM-DD | Seed | Initial capture of [Idea Name] | Agent | Briefly state the trigger or catalyst. |
-| | | | | |
+| Date | Stage | Action | Notes |
+|---|---|---|---|
+| YYYY-MM-DD | Seed | Idea captured | |
 
 ---
 
-## Stage Checklist
+## Latest Decision
+[One paragraph — where things stand and what was decided last]
 
-### 1. Seed
-- [ ] Idea folder created under `/ideas/` in kebab-case.
-- [ ] `README.md` created with a high-level pitch, problem, solution, and TAM.
-- [ ] Initial `status.md` initialized.
+## Next Action
+- [ ] [specific next step + owner]
 
-### 2. Analysis
-- [ ] `feasibility.md` created with technical, operational, and market feasibility.
-- [ ] `profitability.md` created with unit economics and break-even calculations.
-- [ ] Go/No-Go recommendation documented.
+---
 
-### 3. Synthesis
-- [ ] Cross-idea linkages and dependencies checked.
-- [ ] `synthesis.md` created (or referenced in `/combined/` for multi-idea integrations).
+## Graduation Fields
+*(Fill in only when stage = Graduated)*
 
-### 4. Roadmap
-- [ ] `roadmap.md` created.
-- [ ] Features prioritized (MVP vs later phases).
-- [ ] Dependency graph and rollout sequencing completed.
+**Graduated on:** YYYY-MM-DD
+**New repo:** [repo-name]
+**Bootstrap:** `bash archive/graduated/[idea-name]/bootstrap.sh`
+**Vision doc validated by:** [names + date]
+**Archived at:** `archive/graduated/[idea-name]/`
 
-### 5. Graduation / Archiving
-- [ ] Final sign-off received.
-- [ ] Folder moved to `/archive/graduated/` (if graduated) or `/archive/` (if killed/paused).
-- [ ] Final status and destination repo logged.
+---
+
+## Archive Fields
+*(Fill in only when stage = Archived/killed)*
+
+**Archived on:** YYYY-MM-DD
+**Reason:** [specific reason — not "lost interest". What assumption failed, what number didn't close, what changed?]
+**Revisit if:** [the condition under which this idea becomes worth looking at again — or "never" if truly dead]
+**Archived at:** `archive/killed/[idea-name]/`
