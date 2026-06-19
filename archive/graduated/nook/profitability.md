@@ -1,4 +1,4 @@
-# Profitability Model — Scribble
+# Profitability Model — Nook
 
 **Modeler:** Antigravity  
 **Date:** 2026-06-20  
@@ -13,11 +13,11 @@
 | Model | Pros | Cons | Fit for this idea |
 |---|---|---|---|
 | **Virtual Furniture Shop (IAP)** | Extremely high margins; Gen Z is highly accustomed to buying digital room aesthetics (Roblox, Habbo). | Requires regular artist output to keep catalog fresh. | High (purchasing animated posters, jukebox skins, custom flooring). |
-| **Scribble Premium (Sub)** | Predictable, recurring revenue. | Low initial conversion rate (~2%). | High (unlocking multiple custom rooms, ad-free Halls, and premium interactive items). |
+| **Nook Premium (Sub)** | Predictable, recurring revenue. | Low initial conversion rate (~2%). | High (unlocking multiple custom rooms, ad-free Halls, and premium interactive items). |
 | **Sponsorships & Ads** | Monetizes free-tier users who hang out in public Halls. | Intrusive ads ruin the "cozy" aesthetic. | Medium-High (non-intrusive brand posters/billboards inside public Community Halls). |
 
 **Recommended model:**
-Hybrid. Free tier users monetize via billboard ads in public Community Halls. The main revenue engine is cosmetic micro-transactions (furniture/decor packs priced at ₹29–₹199) and a **"Scribble VIP"** subscription (₹249/mo) that removes ads and grants monthly cosmetic tokens.
+Hybrid. Free tier users monetize via billboard ads in public Community Halls. The main revenue engine is cosmetic micro-transactions (furniture/decor packs priced at ₹29–₹199) and a **"Nook VIP"** subscription (₹249/mo) that removes ads and grants monthly cosmetic tokens.
 
 ---
 
@@ -26,7 +26,7 @@ Hybrid. Free tier users monetize via billboard ads in public Community Halls. Th
 | Tier | Price | What's included | Target segment |
 |---|---|---|---|
 | **Free / Basic** | ₹0 | 1 Room profile, access to public Lobbies/Halls, guest whiteboards, standard furniture catalog. | General audience |
-| **Scribble VIP (Sub)** | ₹249/mo | Ad-free Halls, 2 additional Room profiles, 200 monthly furniture shop tokens, exclusive seasonal decorations. | Highly active users |
+| **Nook VIP (Sub)** | ₹249/mo | Ad-free Halls, 2 additional Room profiles, 200 monthly furniture shop tokens, exclusive seasonal decorations. | Highly active users |
 | **Theme & Furniture Packs (IAP)** | ₹29–₹199 | Themed item sets (e.g., "Cyberpunk Setup", "Cozy Plant Loft", "Kawaii Arcade"). | Customization enthusiasts |
 | **Interactive Jukebox Upgrade (IAP)**| ₹99 one-time | Unlocks Spotify/Apple Music playback link widget inside your room. | Music-oriented users |
 

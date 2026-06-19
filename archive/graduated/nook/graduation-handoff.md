@@ -1,8 +1,8 @@
-# Graduation Handoff — Scribble (formerly VibeWidget)
+# Graduation Handoff — Nook (formerly VibeWidget)
 
 **Graduated on:** 2026-06-20  
-**From:** `ideas/vibe-widget/`  
-**To:** New repo `scribble`  
+**From:** `archive/graduated/nook/`  
+**To:** New repo `nook`  
 **Owner:** User  
 **Co-owner:** Antigravity (Agent)
 
@@ -11,7 +11,7 @@
 ## New Repo Setup
 
 ### Suggested repo name
-`scribble`
+`nook`
 
 ### Suggested description (for GitHub)
 A spatial, virtual room-based social platform for Gen Z to customize digital rooms, hang out in community halls, and play widgets.
@@ -42,7 +42,7 @@ A spatial, virtual room-based social platform for Gen Z to customize digital roo
 
 ### First week checklist (copy to new repo's issues)
 - [ ] Initialize repo with the structure above.
-- [ ] Copy `ideas/vibe-widget/roadmap.md` → `docs/roadmap.md`.
+- [ ] Copy `archive/graduated/nook/roadmap.md` → `docs/roadmap.md`.
 - [ ] Set up developer environments for iOS WidgetKit and Android AppWidget.
 - [ ] Create GitHub Project board with Phase 0 tasks.
 - [ ] **Technical Spike**: Code a basic interactive widget prototype (Tic-Tac-Toe) on iOS & Android and test tap latencies.
@@ -68,7 +68,7 @@ All of these should be migrated to the new repo's `docs/`:
 ---
 
 ## What Was Explicitly Ruled Out
-- **Direct Text Messaging**: Replaced text with visual stamps, doodles, and synchronized Voice Scribbles to preserve the authentic, creative, low-pressure aesthetic.
+- **Direct Text Messaging**: Replaced text with visual stamps, doodles, and synchronized Voice Nooks to preserve the authentic, creative, low-pressure aesthetic.
 - **3D VR Lobbies**: Kept environments in 2D pixel-art style to support immediate, low-barrier performance on all mobile screens and widgets.
 
 ---

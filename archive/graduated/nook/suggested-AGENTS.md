@@ -1,7 +1,7 @@
-# AGENTS.md — Scribble Build Repo
+# AGENTS.md — Nook Build Repo
 
 ## Purpose
-This repository contains the production code for the Scribble spatial social platform. Agents working in this codebase focus on writing optimized mobile clients and highly scalable WebSocket sync servers.
+This repository contains the production code for the Nook spatial social platform. Agents working in this codebase focus on writing optimized mobile clients and highly scalable WebSocket sync servers.
 
 ## Codebase Stack
 - **iOS Client**: Swift, WidgetKit, Metal API (for canvas drawings)

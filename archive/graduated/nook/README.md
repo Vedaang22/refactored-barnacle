@@ -1,4 +1,4 @@
-# Scribble
+# Nook
 
 **Stage:** Seed  
 **Created:** 2026-06-20  
@@ -11,7 +11,7 @@
 Gen Z is disconnected by flat scrolling feeds and lonely chat groups. They crave spatial "hangout" environments that replicate physical spaces (like customized bedrooms or neighborhood lounges), but existing virtual world platforms (like Roblox or Rec Room) are too heavy, gaming-focused, and lack native integration with mobile operating systems (widgets).
 
 ## Solution
-**Scribble** is a lightweight, spatial social network. Every user gets a customizable **Virtual Room** (an interactive 2D room profile with pixel-art furniture, posters, and interactive widgets). Users explore the network by entering public **Community Halls** (fandom lounges, gaming spaces, art rooms) where they can "hang" their custom canvases. Communication is ambient and visual, utilizing "Vibe-Casting" (synced weather/battery states), "Voice Scribbles," and "Widget Games" played directly on the home screen.
+**Nook** is a lightweight, spatial social network. Every user gets a customizable **Virtual Room** (an interactive 2D room profile with pixel-art furniture, posters, and interactive widgets). Users explore the network by entering public **Community Halls** (fandom lounges, gaming spaces, art rooms) where they can "hang" their custom canvases. Communication is ambient and visual, utilizing "Vibe-Casting" (synced weather/battery states), "Voice Nooks," and "Widget Games" played directly on the home screen.
 
 ## Target User
 - **Primary:** Gen Z teens and young adults (aged 13–24) who love aesthetic customization, avatar styling, and low-pressure online hangout spots.
@@ -27,12 +27,12 @@ Gen Z is disconnected by flat scrolling feeds and lonely chat groups. They crave
 A mobile application with widgets supporting:
 1. **The Room (Profile):** A pixel-art canvas room where users can arrange interactive furniture (e.g., a guest whiteboard, a music jukebox linking Spotify).
 2. **Community Halls:** Themed lobbies (e.g., Anime, Gaming, Chill Lounge) where users can post their canvases and doodle collectively.
-3. **Voice Scribbles:** Drawings that record and play back synced audio messages when tapped.
+3. **Voice Nooks:** Drawings that record and play back synced audio messages when tapped.
 4. **Widget Games:** Asynchronous micro-games (like Tic-Tac-Toe or Pet Feed) played directly on the home-screen widget.
 
 ## Out of Scope (v1)
 - 3D environments or VR support (strictly 2D pixel-art/vector spaces).
-- High-fidelity voice chats (strictly asynchronous audio voice-scribbles and chat streams).
+- High-fidelity voice chats (strictly asynchronous audio voice-Nooks and chat streams).
 - Complex asset creators (all room furniture assets are pre-designed templates).
 
 ## Open Questions

@@ -1,4 +1,4 @@
-# Feature Roadmap — Scribble
+# Feature Roadmap — Nook
 
 **Date:** 2026-06-20  
 **Based on:** [feasibility.md](file:///D:/my-projects/refactored-barnacle/ideas/vibe-widget/feasibility.md) and [profitability.md](file:///D:/my-projects/refactored-barnacle/ideas/vibe-widget/profitability.md)  
@@ -16,10 +16,10 @@
 | F-04 | Ambient Vibe-Casting | Sync and render real-time phone states (local weather effects, battery charging state) in the Room. | As a user, I want my Room environment to sync with my actual weather so my friends feel co-present. |
 | F-05 | Spotify Jukebox Widget | Interactive object linking Spotify SDK to display current tracks and play 10s song snippets. | As a visitor, I want to tap my friend's Jukebox to listen to their current favorite song. |
 | F-06 | Widget Games | Asynchronous micro-games (Tic-Tac-Toe, Pet Feed) played directly on the home-screen widget. | As a user, I want to take my turn in Tic-Tac-Toe directly from my home screen widget. |
-| F-07 | Voice Scribbles | Draw visual doodles that record and playback synchronized audio when tapped. | As a user, I want to draw a Voice Scribble so my friends see the drawing build as they hear my voice message. |
+| F-07 | Voice Nooks | Draw visual doodles that record and playback synchronized audio when tapped. | As a user, I want to draw a Voice Nook so my friends see the drawing build as they hear my voice message. |
 | F-08 | On-Device AI Moderation | Local mobile classifier that scans sketches on Guest Blackboards before saving. | As a user, I want drawings to be filtered for NSFW content so my Blackboard widget stays safe. |
 | F-09 | Live Room Duets | Live presence indicators (glowing doors) showing when a friend is active in your Room. | As a user, I want to see when a friend is visiting my room so we can hang out together. |
-| F-10 | Profile Link Sharing | Custom deep-links (e.g. `scribble.me/user`) that render high-fidelity previews when shared. | As a user, I want to share a beautiful link of my Room on TikTok to invite new followers. |
+| F-10 | Profile Link Sharing | Custom deep-links (e.g. `nook.me/user`) that render high-fidelity previews when shared. | As a user, I want to share a beautiful link of my Room on TikTok to invite new followers. |
 
 ---
 
@@ -33,14 +33,14 @@
 | F-04 | Ambient Vibe-Casting | | ✅ | | |
 | F-05 | Spotify Jukebox Widget | | ✅ | | |
 | F-06 | Widget Games | ✅ | | | |
-| F-07 | Voice Scribbles | | ✅ | | |
+| F-07 | Voice Nooks | | ✅ | | |
 | F-08 | On-Device AI Moderation | ✅ | | | |
 | F-09 | Live Room Duets | | ✅ | | |
 | F-10 | Profile Link Sharing | ✅ | | | |
 
 **MVP features:** F-01, F-02, F-03, F-06, F-08, F-10  
 **MVP rationale:**
-The MVP must validate the spatial social platform core: (1) users want to build rooms (F-01) and share them (F-10), (2) friends will interact via widgets with games (F-06) and Guest Blackboards (F-02), and (3) users can discover rooms via Community Halls (F-03) safely (F-08). Voice Scribbles and Jukeboxes are post-validation retention features.
+The MVP must validate the spatial social platform core: (1) users want to build rooms (F-01) and share them (F-10), (2) friends will interact via widgets with games (F-06) and Guest Blackboards (F-02), and (3) users can discover rooms via Community Halls (F-03) safely (F-08). Voice Nooks and Jukeboxes are post-validation retention features.
 
 ---
 
@@ -54,7 +54,7 @@ F-10 (Profile Link Sharing)
   └── F-03 (Community Halls)
         ├── F-04 (Ambient Vibe-Casting)
         ├── F-05 (Spotify Jukebox)
-        └── F-07 (Voice Scribbles)
+        └── F-07 (Voice Nooks)
 ```
 
 **Blocking dependencies:**
@@ -98,7 +98,7 @@ Goal: Launch Guest Blackboards, Community Halls, and closed beta.
 Goal: Launch v1.0 globally, add ambient castings, Spotify integration, and cosmetics.
 - [ ] F-05: Spotify Jukebox Widget
 - [ ] F-04: Ambient Vibe-Casting (Local weather sync)
-- [ ] F-07: Voice Scribbles
+- [ ] F-07: Voice Nooks
 
 ---
 

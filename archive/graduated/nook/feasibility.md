@@ -1,4 +1,4 @@
-# Feasibility Analysis — Scribble
+# Feasibility Analysis — Nook
 
 **Analyst:** Antigravity  
 **Date:** 2026-06-20  
@@ -12,11 +12,11 @@
 |---|---|---|
 | Core tech exists? | Yes | High |
 | Build complexity | Very High / Extreme | High |
-| Key technical risks | iOS 17+ / Android widget interaction budgets, coordinate-to-audio sync for Voice Scribbles, high-density WebSocket state sync in Community Halls | High |
+| Key technical risks | iOS 17+ / Android widget interaction budgets, coordinate-to-audio sync for Voice Nooks, high-density WebSocket state sync in Community Halls | High |
 | Existing solutions to learn from | Habbo/Club Penguin (2D room assets), dynamic vector playback engines, iOS WidgetKit interactive configurations | High |
 
 **Technical verdict:**
-Transitioning Scribble from a simple doodling tool to a spatial social media app raises build complexity to Very High. While 2D pixel-art room layouts (JSON-based coordinates) are highly feasible, syncing drawing coordinates to voice recordings (Voice Scribbles) requires tight timestamp synchronization. Interactive widget games (e.g., Tic-Tac-Toe) are feasible but bounded by iOS/Android widget background processing budgets and latency rules.
+Transitioning Nook from a simple doodling tool to a spatial social media app raises build complexity to Very High. While 2D pixel-art room layouts (JSON-based coordinates) are highly feasible, syncing drawing coordinates to voice recordings (Voice Nooks) requires tight timestamp synchronization. Interactive widget games (e.g., Tic-Tac-Toe) are feasible but bounded by iOS/Android widget background processing budgets and latency rules.
 
 ---
 
@@ -31,7 +31,7 @@ Transitioning Scribble from a simple doodling tool to a spatial social media app
 | Market timing | Right (Massive trend towards cozy, low-pressure aesthetic digital environments and anti-scroll platforms) |
 
 **Market verdict:**
-Pivoting to spatial Rooms and Community Halls elevates Scribble from a utility widget to an authentic social network. It taps into Gen Z's desire for visual, slow-paced spaces to interact without standard algorithmic pressure.
+Pivoting to spatial Rooms and Community Halls elevates Nook from a utility widget to an authentic social network. It taps into Gen Z's desire for visual, slow-paced spaces to interact without standard algorithmic pressure.
 
 ---
 
@@ -62,7 +62,7 @@ Rank by severity × probability:
 | **Widget UI Throttling** (Interactive widget clicks lag) | High | High | Keep widget games asynchronous and local. Store state changes locally and sync to the cloud in the background, updating the widget interface instantly from local memory. |
 | **Public Hall Spam / Griefing** | Critical | High | Implement strict room submission gates (e.g., must be a user for 24h before posting in a public Hall) and automatic sketch screening APIs. |
 | **Asset Fatigue** (Users run out of furniture/room items) | Medium | High | Partner with indie pixel artists to publish weekly themed furniture drops, creating a continuous content pipeline. |
-| **Audio-Sync Latency** (Voice Scribbles drawing plays out of sync with sound) | Medium | Medium | Compress audio to lightweight ACC formats and bundle drawing vectors with audio delta-time arrays in a single compressed JSON package. |
+| **Audio-Sync Latency** (Voice Nooks drawing plays out of sync with sound) | Medium | Medium | Compress audio to lightweight ACC formats and bundle drawing vectors with audio delta-time arrays in a single compressed JSON package. |
 
 ---
 
@@ -80,7 +80,7 @@ Rank by severity × probability:
 
 ---
 
-## Assumption Stress-Test: Scribble
+## Assumption Stress-Test: Nook
 
 ### The 5 Most Dangerous Assumptions
 
@@ -107,7 +107,7 @@ Rank by severity × probability:
 
 ---
 
-**Assumption 4: Users will use Voice Scribbles (audio-synced drawings) as a regular communication channel.**
+**Assumption 4: Users will use Voice Nooks (audio-synced drawings) as a regular communication channel.**
 - Why it might be wrong: Recording voice notes and drawing simultaneously requires dual coordination and high friction. Most users will find it easier to just record a voice note or send a simple text, leading to low adoption of the feature.
 - Cheap validation: Give a pilot group access to a tool where they must record a voice memo while sketching. Track their usage frequency and compare it to text messaging.
 - Kill probability if wrong: Medium
