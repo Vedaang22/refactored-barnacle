@@ -20,6 +20,11 @@
 | F-08 | On-Device AI Moderation | Local mobile classifier that scans sketches on Guest Blackboards before saving. | As a user, I want drawings to be filtered for NSFW content so my Blackboard widget stays safe. |
 | F-09 | Live Room Duets | Live presence indicators (glowing doors) showing when a friend is active in your Room. | As a user, I want to see when a friend is visiting my room so we can hang out together. |
 | F-10 | Profile Link Sharing | Custom deep-links (e.g. `nook.me/user`) that render high-fidelity previews when shared. | As a user, I want to share a beautiful link of my Room on TikTok to invite new followers. |
+| F-11 | Nookies Customizer | Modular 2D pixel-art character builder supporting clothes, hair, accessories, and emotes. | As a user, I want to style my Nookie avatar so it reflects my personal fashion and identity. |
+| F-12 | Nook Pets | Interactive virtual widget pets requiring feeding/petting and displaying emotional reactions. | As a pet owner, I want to care for my Nook Pet on my widget so it stays happy and grows. |
+| F-13 | Vibe-Knocks | Widget button triggering rhythmic haptic phone vibrations and sliding dynamic sticky doodles to a friend. | As a user, I want to knock on my friend's screen so they feel my physical vibration ping. |
+| F-14 | Room Soundscapes | Background audio engine playing ambient loops (rain, lofi guitar) when a Room is viewed. | As a user, I want to set a lofi rain soundscape in my room so visitors feel relaxed. |
+| F-15 | Widget Duets | Asynchronous drawing canvases shared on close friends' home screen widgets. | As a user, I want to draw with my friend on a shared widget so we can co-doodle asynchronously. |
 
 ---
 
@@ -37,10 +42,15 @@
 | F-08 | On-Device AI Moderation | ✅ | | | |
 | F-09 | Live Room Duets | | ✅ | | |
 | F-10 | Profile Link Sharing | ✅ | | | |
+| F-11 | Nookies Customizer | ✅ | | | |
+| F-12 | Nook Pets | | ✅ | | |
+| F-13 | Vibe-Knocks | | ✅ | | |
+| F-14 | Room Soundscapes | | ✅ | | |
+| F-15 | Widget Duets | ✅ | | | |
 
-**MVP features:** F-01, F-02, F-03, F-06, F-08, F-10  
+**MVP features:** F-01, F-02, F-03, F-06, F-08, F-10, F-11, F-15  
 **MVP rationale:**
-The MVP must validate the spatial social platform core: (1) users want to build rooms (F-01) and share them (F-10), (2) friends will interact via widgets with games (F-06) and Guest Blackboards (F-02), and (3) users can discover rooms via Community Halls (F-03) safely (F-08). Voice Nooks and Jukeboxes are post-validation retention features.
+The MVP must validate the spatial, social, and avatar-driven home screen core: (1) users want to build rooms (F-01), style their Nookie avatars (F-11), and share them (F-10), (2) friends can co-doodle on home-screen Widget Duets (F-15) and play asynchronous games (F-06), and (3) users can wander as Nookies through public Community Halls (F-03) safely (F-08). Voice Nooks, Soundscapes, and Knocks are post-validation retention features.
 
 ---
 
@@ -48,28 +58,36 @@ The MVP must validate the spatial social platform core: (1) users want to build 
 
 ```
 F-10 (Profile Link Sharing)
-  ├── F-01 (Spatial Room Builder)
-  │     ├── F-02 (Guest Blackboard) ── F-08 (AI Moderation)
-  │     └── F-06 (Widget Games)
-  └── F-03 (Community Halls)
-        ├── F-04 (Ambient Vibe-Casting)
-        ├── F-05 (Spotify Jukebox)
-        └── F-07 (Voice Nooks)
+  ├── F-01 (Spatial Room Builder) ── F-14 (Soundscapes)
+  │     ├── F-02 (Guest Blackboard) ── F-08 (AI Moderation) ── F-15 (Widget Duets)
+  │     └── F-06 (Widget Games) ────┐
+  └── F-11 (Nookies Customizer) ─────┼── F-12 (Nook Pets)
+        ├── F-03 (Community Halls)  └── F-13 (Vibe-Knocks)
+        │     ├── F-04 (Ambient Vibe-Casting)
+        │     ├── F-05 (Spotify Jukebox)
+        │     └── F-07 (Voice Nooks)
 ```
 
 **Blocking dependencies:**
-- **F-10** blocks **F-01**: Room layouts cannot be shared or linked until the profile sharing backend exists.
-- **F-01** blocks **F-02** & **F-06**: Whiteboards and widget games cannot be placed in a room until the spatial room layout engine is functional.
-- **F-02** blocks **F-08**: The moderation model cannot screen guest drawings until the Guest Blackboard canvas is built.
-- **F-03** blocks F-04, F-05, and F-07: Fandom assets require community hub structures to exist.
+- **F-10** blocks **F-01** and **F-11**: Profiles and links must exist before rooms and characters can be saved/shared.
+- **F-01** blocks **F-02**, **F-06**, and **F-14**: Whiteboards, widget games, and room soundscapes require the spatial builder to lay them out.
+- **F-11** blocks **F-03** and **F-12**: Avatars are required to populate public lounges and to unlock the interactive widget companion system.
+- **F-02** & **F-08** block **F-15**: Widget Duets require drawing canvas mechanics and AI sketch filters.
+- **F-06** blocks **F-12** & **F-13**: Interactive widget intents are required for widget pet care and rhythmic knock buttons.
+
+**External dependencies:**
+- Apple APNs / Firebase Cloud Messaging (FCM) → Critical for pushing real-time Vibe-Knocks and Widget Duet turns.
+- Apple Music / Spotify API SDK → Critical for F-05 Jukebox synchronization.
 
 ---
 
 ## Critical Path
 
+The shortest sequence of features that gets us to a shippable MVP:
+
 ```
-[F-10: Link Sharing] ──> [F-01: Room Builder] ──> [F-02: Guest Board] ──> [F-08: AI Moderation] ──> [F-06: Widget Games] ──> MVP
-        6 days                  12 days                  8 days                  8 days                  10 days       = 44 days
+[F-10: Link Sharing] ──> [F-11: Nookies] ──> [F-01: Room Builder] ──> [F-02: Guest Board] ──> [F-15: Widget Duets] ──> MVP
+        6 days                 10 days              12 days                 8 days                  8 days         = 44 days
 ```
 
 **Critical path length:** 44 days (~9 weeks of pure dev time).
@@ -78,61 +96,66 @@ F-10 (Profile Link Sharing)
 
 ## Rollout Phases
 
-### Phase 0 — Widget & Interaction Spike (Week 1–3)
-Goal: Prove interactive widget games work on iOS/Android, and train the local CoreML sketch filter.
+### Phase 0 — Widget & Customizer Spike (Week 1–3)
+Goal: Prove widget interactive limits, test dynamic layered rendering memory footprints, and train CoreML sketch filter.
 - [ ] F-06: Widget Games (Build an interactive Tic-Tac-Toe widget prototype)
 - [ ] F-08: On-Device AI Moderation (Train sketch classification weights)
+- [ ] F-11: Nookies Layering Spike (Headless Swift dynamic compositing memory check against 30MB limit)
 
-### Phase 1 — Spatial Editor (Week 4–7)
-Goal: Complete the 2D room builder grid engine and deep-linking share system.
+### Phase 1 — Spatial Editor & Identity (Week 4–7)
+Goal: Complete 2D room builder grid engine, modular pixel avatar customizer, and deep-linking share system.
 - [ ] F-01: Spatial Room Builder (Grid coordinate layout and asset layers)
 - [ ] F-10: Profile Link Sharing (TikTok/Instagram rich previews)
+- [ ] F-11: Nookies Customizer (UI clothes dressing/hair selector)
 
-### Phase 2 — Social Integration (Week 8–10)
-Goal: Launch Guest Blackboards, Community Halls, and closed beta.
+### Phase 2 — Social & Co-op (Week 8–10)
+Goal: Launch Guest boards, Community Halls, Widget Duets, and closed beta.
 - [ ] F-02: Guest Blackboard Widget
-- [ ] F-03: Community Halls (Lounges for showcasing rooms)
-- [ ] Closed TestFlight/Google Play beta (1,000 active users)
+- [ ] F-15: Widget Duets (Home-screen async doodle canvas)
+- [ ] F-03: Community Halls (Lounges showcasing rooms with walking Nookies)
+- [ ] Closed Testflight beta (1,000 active users)
 
-### Phase 3 — Fandom & Ambient Additions (Week 11+)
-Goal: Launch v1.0 globally, add ambient castings, Spotify integration, and cosmetics.
-- [ ] F-05: Spotify Jukebox Widget
+### Phase 3 — Pets, Knocks, & Atmosphere (Week 11+)
+Goal: Global release, add widget pets, vibe-knocks, weather cast, and soundscapes.
+- [ ] F-12: Nook Pets (Widget companion loops)
+- [ ] F-13: Vibe-Knocks (Haptic rhythm pings)
+- [ ] F-14: Room Soundscapes (Lofi audio mixers)
 - [ ] F-04: Ambient Vibe-Casting (Local weather sync)
+- [ ] F-05: Spotify Jukebox Widget
 - [ ] F-07: Voice Nooks
 
 ---
 
 ## Algorithm / Technical Sketches
 
-### Interactive Widget Game Action Intent (F-06)
-
-To handle instant widget button taps (e.g. placing an 'X' in Tic-Tac-Toe) without visual lag:
+### Dynamic Layered Sprite Caching for Widgets (F-11)
+To prevent out-of-memory (OOM) failures inside iOS WidgetKit and Android AppWidget limits, modular avatar sprites are cached as flat PNGs before rendering on home screen widgets:
 
 ```
-[User taps grid button on home screen widget]
-                   │
-                   ▼
-1. Trigger AppIntent / PendingIntent (passing cell_id, match_id)
-                   │
-                   ▼
-2. Read Local Widget State File (JSON cache)
-                   │
-                   ▼
-3. Instantly write updated state locally: Match.board[cell_id] = 'X'
-                   │
-                   ▼
-4. Call WidgetCenter.shared.reloadTimelines() (re-draws widget instantly from local cache)
-                   │
-                   ▼
-5. Spin up background queue task to sync board state to DB server via HTTP POST
+[Nookie Avatar Customization saved in App]
+                    │
+                    ▼
+1. App compiles layer IDs (body_12, hair_04, shirt_99, hat_03)
+                    │
+                    ▼
+2. App runs Headless Render Task in background (e.g. Core Graphics layer merge)
+                    │
+                    ▼
+3. Output compiled flat PNG image and write to App Group shared container: 'shared/avatar_user1.png'
+                    │
+                    ▼
+4. Call WidgetCenter.shared.reloadTimelines()
+                    │
+                    ▼
+5. Widget Extension reads flat PNG directly from local storage and displays in image view (RAM < 2MB, no OOM)
 ```
 
 ---
 
 ## Open Questions Before Building Starts
 - [ ] **Interactive Widget Budget:** Does iOS limit the number of `AppIntent` timeline reloads per hour for interactive widgets?
-- [ ] **Asset Scaling:** How do we optimize rendering for custom pixel-art assets to prevent device overheating during editing?
-- [ ] **Community Moderation:** Do we require user-selected "Hall Wardens" (moderators) to manually sweep public rooms?
+- [ ] **Dynamic Sprite States:** How do we optimize the dynamic sprite sheet generation for animatable character states (e.g. idle, sleeping, waving) without blowing up background storage?
+- [ ] **Android RemoteViews limit:** Does Android's RemoteViews support caching custom drawings in AppWidgetProvider without triggering binder transaction limit errors?
 
 ---
 
@@ -141,5 +164,7 @@ To handle instant widget button taps (e.g. placing an 'X' in Tic-Tac-Toe) withou
 | Risk | Affects | Mitigation | Owner |
 |---|---|---|---|
 | Widget Latency | F-06 | Fall back to opening the app on tap if OS background intents throttle drawing. | Lead iOS Engineer |
+| Widget OOM Crashes | F-11, F-12 | Pre-render and cache composited transparent PNGs in the main app's shared container instead of runtime layering inside the widget. | Lead Mobile Architect |
 | Storage Overrun | F-01 | Restrict custom item uploads to standard template catalog items in v1. | Backend Engineer |
-| Abuse on Whiteboards | F-02 | Allow room owners to wipe their blackboard instantly or set whiteboard permissions to "Friends Only." | Product Owner |
+| Abuse on Whiteboards | F-02, F-15 | Allow room owners to wipe their blackboard instantly or set whiteboard permissions to "Friends Only." | Product Owner |
+| Haptic/Ping Spam | F-13 | Impose rate-limiting on Knocks (e.g. max 3 Knocks/friend/hour) and allow users to mute knocks globally or per-friend. | Lead Backend |

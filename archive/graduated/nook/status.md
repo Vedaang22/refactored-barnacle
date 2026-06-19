@@ -1,48 +1,47 @@
-# Idea Status: VibeWidget (Nook)
+# Status — Nook
 
-## Current Status
-- **Current Stage**: Graduated
-- **Last Updated**: 2026-06-20
-- **Primary Owner**: User
+**Current Stage:** Graduated
 
 ---
 
-## Decision & Lifecycle Log
+## Stage History
 
-| Date | Stage | Action / Decision | Owner | Notes / Key Takeaways |
-| :--- | :--- | :--- | :--- | :--- |
-| 2026-06-19 | Seed | Initial capture of VibeWidget | Agent | User proposed an app combining Instagram doodles, snapchat bitmojis, and widget connectivity for Gen Z. |
-| 2026-06-19 | Analysis | Completed feasibility analysis & profitability modeling | Agent | Overall verdict: 🟡 Conditionally Feasible. Proceeding to roadmapping. |
-| 2026-06-19 | Synthesis | Completed synthesis cross-checks | Agent | Marked as complete. No other ideas exist in the lab currently to cross-reference. |
-| 2026-06-19 | Roadmap | Created feature roadmap | Agent | Established 8-week MVP plan focusing on push-to-widget updates. |
-| 2026-06-19 | Roadmap | Pivoted to Nook Social Network | Agent | Expanded idea into a full visual social network (Doodle Match discovery, Community Canvases, Live Duets, On-Device AI Moderation). |
-| 2026-06-20 | Roadmap | Spatial social network pivot (Rooms & Halls) | Agent | Redesigned platform around customized profiles (Rooms), community lounges (Halls), widget games, and interactive widgets. |
-| 2026-06-20 | Graduated | Graduated to dedicated build repository | Agent | Completed roadmap validation. Moving folder to `/archive/graduated/nook/`. |
+| Date | Stage | Action | Notes |
+|---|---|---|---|
+| 2026-06-19 | Seed | Idea captured | Captured from initial VibeWidget concept. |
+| 2026-06-19 | Analysis | Completed analysis | Conditionally Feasible verdict. |
+| 2026-06-19 | Synthesis | Completed synthesis | No overlap with other lab ideas. |
+| 2026-06-19 | Roadmap | Completed roadmap | 8-week MVP plan drafted. |
+| 2026-06-20 | Roadmap | Redesigned platform | Spatial pivot and Nook rename. |
+| 2026-06-20 | Graduated | Graduation complete | Initial graduation under old pipeline. |
+| 2026-06-20 | Roadmap | Reopened for updates | Added Nookies, Widget Duets, and Nook Pets features. |
+| 2026-06-20 | Graduated | Re-graduation complete | Finalized under the new graduation pipeline. |
 
 ---
 
-## Stage Checklist
+## Latest Decision
+Nook has successfully re-graduated to incorporate customizable modular pixel avatars ("Nookies"), interactive Widget Duets, widget Nook Pets, haptic Vibe-Knocks, and room soundscapes. All feasibility, profitability, and roadmap models have been updated to reflect these additions and the technical mitigations for iOS/Android widget memory limits.
 
-### 1. Seed
-- [x] Folder created under `/ideas/` in kebab-case.
-- [x] `README.md` created with a high-level pitch, problem, solution, and TAM.
-- [x] Initial `status.md` initialized.
+## Next Action
+- [ ] Initialize the `nook` build repository and run `bootstrap.sh` to generate the workspace structure.
 
-### 2. Analysis
-- [x] `feasibility.md` created with technical, operational, and market feasibility.
-- [x] `profitability.md` created with unit economics and break-even calculations.
-- [x] Go/No-Go recommendation documented.
+---
 
-### 3. Synthesis
-- [x] Cross-idea linkages and dependencies checked.
-- [x] `synthesis.md` created (or referenced in `/combined/` for multi-idea integrations).
+## Graduation Fields
+*(Fill in only when stage = Graduated)*
 
-### 4. Roadmap
-- [x] `roadmap.md` created.
-- [x] Features prioritized (MVP vs later phases).
-- [x] Dependency graph and rollout sequencing completed.
+**Graduated on:** 2026-06-20
+**New repo:** nook
+**Bootstrap:** `bash archive/graduated/nook/bootstrap.sh`
+**Vision doc validated by:** User + Agent on 2026-06-20
+**Archived at:** `archive/graduated/nook/`
 
-### 5. Graduation / Archiving
-- [x] Final sign-off received.
-- [x] Folder moved to `/archive/graduated/` (if graduated) or `/archive/` (if killed/paused).
-- [x] Final status and destination repo logged.
+---
+
+## Archive Fields
+*(Fill in only when stage = Archived/killed)*
+
+**Archived on:** YYYY-MM-DD
+**Reason:** [specific reason — not "lost interest". What assumption failed, what number didn't close, what changed?]
+**Revisit if:** [the condition under which this idea becomes worth looking at again — or "never" if truly dead]
+**Archived at:** `archive/killed/nook/`
