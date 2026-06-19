@@ -1,7 +1,7 @@
 # Idea Status: VibeWidget (Scribble)
 
 ## Current Status
-- **Current Stage**: Roadmap
+- **Current Stage**: Graduated
 - **Last Updated**: 2026-06-20
 - **Primary Owner**: User
 
@@ -17,6 +17,7 @@
 | 2026-06-19 | Roadmap | Created feature roadmap | Agent | Established 8-week MVP plan focusing on push-to-widget updates. |
 | 2026-06-19 | Roadmap | Pivoted to Scribble Social Network | Agent | Expanded idea into a full visual social network (Doodle Match discovery, Community Canvases, Live Duets, On-Device AI Moderation). |
 | 2026-06-20 | Roadmap | Spatial social network pivot (Rooms & Halls) | Agent | Redesigned platform around customized profiles (Rooms), community lounges (Halls), widget games, and interactive widgets. |
+| 2026-06-20 | Graduated | Graduated to dedicated build repository | Agent | Completed roadmap validation. Moving folder to `/archive/graduated/vibe-widget/`. |
 
 ---
 
@@ -42,6 +43,6 @@
 - [x] Dependency graph and rollout sequencing completed.
 
 ### 5. Graduation / Archiving
-- [ ] Final sign-off received.
-- [ ] Folder moved to `/archive/graduated/` (if graduated) or `/archive/` (if killed/paused).
-- [ ] Final status and destination repo logged.
+- [x] Final sign-off received.
+- [x] Folder moved to `/archive/graduated/` (if graduated) or `/archive/` (if killed/paused).
+- [x] Final status and destination repo logged.
