@@ -1,8 +1,8 @@
-# Profitability Model — VibeWidget
+# Profitability Model — Scribble
 
 **Modeler:** Antigravity  
 **Date:** 2026-06-19  
-**Revenue Model:** Freemium (Ad-supported Free Tier + Premium Features/Cosmetics)
+**Revenue Model:** Freemium (Ad-supported Free Tier + Custom Assets/IAP + Premium Subscription)
 
 > ⚠️ All numbers are estimates. State your assumptions explicitly.
 
@@ -12,12 +12,12 @@
 
 | Model | Pros | Cons | Fit for this idea |
 |---|---|---|---|
-| **Freemium (Subscription)** | High predictability, standard on iOS App Store. | Low conversion rates (~2–5% typical for social apps). | High (Locket Gold and noteit use this model successfully). |
-| **In-App Purchases (Cosmetics)** | One-time purchases are attractive to Gen Z users without credit cards (use App Store balance). | Lower lifetime value (LTV) than subscriptions. | High (buying custom avatars/bitmoji clothing, premium brush packs). |
-| **Ad-supported (Main App)** | Monetizes 100% of active users immediately. | High volume needed; cannot put ads on the actual home screen widget. | Medium (can monetize the canvas view inside the main app). |
+| **Scribble Premium (Sub)** | Predictable revenue stream; captures power users who want deep customizability. | Low conversion (~1.5–3%). | High (paying for ad-free experience, unlimited custom rooms, and premium brush physics). |
+| **Asset Store (IAP)** | Very low friction for Gen Z users; high impulse buy potential. | Non-recurring; requires continuous creation of new digital assets. | High (purchasing limited-edition avatar outfits, neon drawing filters, and community sticker packs). |
+| **Targeted Ads (App-only)** | Monetizes 100% of MAU. Longer app session times due to community rooms drive more impressions. | Hard to monetize the widget directly without ruining user home screens. | High (ads placed within public canvas chat drawers and the discovery tab). |
 
 **Recommended model:**
-Hybrid Freemium + In-App Purchases (IAP). Free users receive a standard canvas and base avatars with ad-supported in-app menus. A premium **"Vibe Plus"** subscription (₹299/mo) unlocks unlimited canvases, unlimited group members, custom drawings/brushes, and exclusive avatar items.
+Hybrid model. Ad monetization inside public community canvases provides the baseline revenue (₹3.50 ARPU/user). Premium subscriptions (₹249/mo) and thematic avatar asset packs (₹49–₹199 IAPs) monetize high-engagement users.
 
 ---
 
@@ -25,12 +25,12 @@ Hybrid Freemium + In-App Purchases (IAP). Free users receive a standard canvas a
 
 | Tier | Price | What's included | Target segment |
 |---|---|---|---|
-| **Free / Basic** | ₹0 | 1 active widget canvas, up to 5 friends, standard brushes, ad-supported app interface. | Casual/new users |
-| **Vibe Plus (Monthly)** | ₹299/mo | Unlimited friend canvases, premium neon/watercolor brushes, unlimited canvas history archive. | Power users, close friend groups |
-| **Cosmetics packs (IAP)** | ₹99 one-time | Exclusive avatar skins, seasonal themed doodle stickers, special emoji reactions. | Aesthetic-driven users |
+| **Free / Basic** | ₹0 | Access to 2 Vibe Rooms (friends), public Community Canvases (ad-supported), 5 daily "Doodle Matches," basic brush set. | General audience |
+| **Scribble Premium** | ₹249/mo | Ad-free experience, unlimited friend rooms, 50 daily Doodle Matches, advanced vector brushes (glow, custom textures), priority rendering. | High-frequency drawers |
+| **Asset & Sticker Packs (IAP)** | ₹49–₹199 | Limited-edition avatar clothes, animated canvas stickers, seasonal doodle brush styles (e.g., Halloween chalk). | Aesthetic-driven users |
 
 **Pricing rationale:**
-Pricing is benchmarked against **Locket Gold** ($3.99/mo ~ ₹330/mo) and **noteit** ($0.99/week ~ ₹80/week), adjusting for Indian market pricing sensitivity while keeping international pricing scalable.
+Subscriptions are priced competitively with regional entertainment products (e.g., Spotify/YouTube Premium student rates in India), while cosmetic IAPs match low-cost micro-transactions familiar to Roblox/mobile game players.
 
 ---
 
@@ -38,12 +38,12 @@ Pricing is benchmarked against **Locket Gold** ($3.99/mo ~ ₹330/mo) and **note
 
 | Metric | Estimate | Basis |
 |---|---|---|
-| **CAC (Customer Acquisition Cost)** | ₹10 | High viral coefficient (K-factor > 1) via SMS/social friend invitations reduces blended CAC. |
-| **ACV (Annual Contract Value)** | ₹89.70 | Blended across all users (assuming 2.5% premium conversion + advertising ARPU of ₹2/MAU). |
-| **Gross Margin** | 85% | Server hosting, database operations, APNs/FCM push costs, and 30% App Store commission. |
-| **LTV (Lifetime Value)** | ₹82.50 | Assuming 10% monthly user churn (average user lifepan of 10 months) on the blended monthly ARPU of ₹8.25. |
-| **LTV:CAC Ratio** | 8.25:1 | Target ratio is > 3:1. (Highly viable if viral loop stays active). |
-| **Payback Period** | 1.2 months | Instant payback due to low acquisition costs of group invites. |
+| **CAC (Customer Acquisition Cost)** | ₹12 | Organic growth driven by Doodle Match sharing and group invites. Blended with low-cost social media seed campaigns. |
+| **ACV (Annual Contract Value)** | ₹113.76 | Blended average across premium conversion (2%), ad revenue (₹3.50/MAU), and micro-transactions (₹1.00/MAU). |
+| **Gross Margin** | 80% | Deducting App Store 30%/15% cut, real-time WebSocket database writes, and automated content moderation API rates. |
+| **LTV (Lifetime Value)** | ₹94.80 | Assuming a blended monthly user churn of 10% (10-month average user lifetime) on a monthly ARPU of ₹9.48. |
+| **LTV:CAC Ratio** | 7.9:1 | Target ratio is > 3:1. (Highly profitable if community engagement maintains high density). |
+| **Payback Period** | 1.3 months | Quick payback driven by instant viral group invites during registration. |
 
 ---
 
@@ -51,11 +51,11 @@ Pricing is benchmarked against **Locket Gold** ($3.99/mo ~ ₹330/mo) and **note
 
 | Item | Monthly |
 |---|---|
-| **Fixed costs** | ₹1,50,000 (hosting, developer tools, basic operational admin) |
-| **Variable cost per user** | ₹0.50 (image bandwidth/CDN storage, push notification runs) |
-| **Revenue per active user** | ₹11.00 (ad revenue + premium conversion blended ARPU) |
-| **Break-even users needed** | 14,286 monthly active users (MAU) |
-| **Realistic timeline to break-even** | 4 months |
+| **Fixed costs** | ₹3,50,000 (hosting WebSocket clusters, database management, automated moderation tools, basic team admin) |
+| **Variable cost per user** | ₹0.75 (bandwidth for vector drawing packages, push notifications, real-time moderation filter sweeps) |
+| **Revenue per active user** | ₹9.48 (ad impressions + premium conversions + cosmetic store sales) |
+| **Break-even users needed** | 40,092 monthly active users (MAU) |
+| **Realistic timeline to break-even** | 6 months |
 
 ---
 
@@ -63,13 +63,13 @@ Pricing is benchmarked against **Locket Gold** ($3.99/mo ~ ₹330/mo) and **note
 
 | Month | Active Users (MAU) | Paying (%) | MRR | Cumulative Revenue |
 |---|---|---|---|---|
-| 1 | 2,000 | 1.0% | ₹5,980 | ₹5,980 |
-| 3 | 15,000 | 2.0% | ₹89,700 | ₹1,49,500 |
-| 6 | 75,000 | 2.5% | ₹5,60,625 | ₹12,70,000 |
-| 12 | 3,00,000 | 2.5% | ₹22,42,500 | ₹95,60,000 |
+| 1 | 5,000 | 1.0% | ₹12,450 | ₹12,450 |
+| 3 | 45,000 | 1.5% | ₹1,68,075 | ₹2,80,000 |
+| 6 | 2,50,000 | 2.0% | ₹12,45,000 | ₹27,50,000 |
+| 12 | 12,00,000 | 2.0% | ₹59,76,000 | ₹2,45,00,000 |
 
 **Growth assumption:**
-Viral growth curve starting slow in month 1, and accelerating as networks (friend groups of 3-5) invite each other to activate the widget. Assumes a K-factor of 1.15.
+Reflects rapid viral growth curves typical of network-based Gen Z social apps. Growth is driven by community sharing and cross-platform invites (TikTok/Snapchat integration). Assumes a viral K-factor of 1.25 post-launch.
 
 ---
 
@@ -77,14 +77,14 @@ Viral growth curve starting slow in month 1, and accelerating as networks (frien
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| **High Churn (Novelty Wear-off)** | Drastically cuts LTV | Introduce seasonal gamified prompts, streaks, and avatar item releases. |
-| **Low Premium Conversion** | Extends break-even timeline | Focus on avatar customizability (which Gen Z has higher propensity to purchase via IAPs). |
-| **High CDN Bandwidth Costs** | Lowers Gross Margin | Compress drawing files strictly to vector stroke paths rather than heavy bitmap files. |
+| **Content Moderation API Overhead** | High variable cost | Move simple NSFW checks to on-device neural networks (CoreML/Android NN) to run filter models locally before cloud upload. |
+| **Low Session Times (Ad Drop)** | Cuts Ad ARPU by 50% | Introduce gamified community events (e.g., live hourly sketch prompt battles) to keep users in the app. |
+| **App Store Rejections** | Delays monetization | Strictly follow Apple's guidelines for subscription terms and user-to-user purchase definitions. |
 
 ---
 
 ## Verdict
 
 **Profitable?** Yes  
-**Key lever:** **Viral K-Factor (Invitations)**. If the app fails to organically prompt users to invite 3–5 friends during the onboarding flow, the CAC will rise, killing the unit economics.  
-**Recommended next step:** Proceed to feature-roadmapping. Ensure the onboarding sequence prioritizes contact syncing and viral invitation triggers.
+**Key lever:** **UGC Retention & Content Moderation**. If moderation fails, user churn spikes and app store penalties kill the platform. If moderation succeeds, the highly engaging visual chat structure yields higher user session times and virality, driving organic growth.  
+**Recommended next step:** Build the MVP roadmap. Prioritize on-device filters (Phase 0) to ensure low-cost moderation before building community systems.

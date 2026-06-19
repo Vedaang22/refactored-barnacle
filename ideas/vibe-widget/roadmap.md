@@ -1,8 +1,8 @@
-# Feature Roadmap — VibeWidget
+# Feature Roadmap — Scribble
 
 **Date:** 2026-06-19  
 **Based on:** [feasibility.md](file:///D:/my-projects/refactored-barnacle/ideas/vibe-widget/feasibility.md) and [profitability.md](file:///D:/my-projects/refactored-barnacle/ideas/vibe-widget/profitability.md)  
-**Horizon:** 8 weeks to MVP, 16 weeks to v1.0
+**Horizon:** 10 weeks to MVP, 20 weeks to v1.0
 
 ---
 
@@ -10,17 +10,17 @@
 
 | ID | Feature | Description | User story (as a ___ I want to ___ so that ___) |
 |---|---|---|---|
-| F-01 | Shared Canvas Sync | Real-time backend synchronizing canvas state among a group of users. | As a user, I want my doodle strokes to sync with my friends' canvases so we can sketch together. |
-| F-02 | Canvas Widget Rendering | Native iOS/Android home-screen widgets rendering the latest canvas snapshot. | As a user, I want to see my group's shared canvas directly on my home screen widget without opening the app. |
-| F-03 | Avatar Customizer (Bitmojis) | Setting and configuring a 2D avatar that can be placed on the canvas. | As a user, I want to customize a personal avatar so that I can represent my presence on our shared widget. |
-| F-04 | Doodle Sketching Canvas | Canvas with basic tools: brush, color picker, eraser, and undo. | As a creative user, I want to use standard drawing tools to sketch doodles easily. |
-| F-05 | Silent Push Sync Engine | APNs/FCM silent notification trigger to force widget refresh when canvas updates. | As a user, I want the widget on my screen to refresh as soon as a friend saves a new doodle. |
-| F-06 | Friend Invite & Group Link | Invite up to 5 friends via a deep link (SMS/WhatsApp) to form a shared canvas group. | As a user, I want to quickly invite my close friends so that we can immediately start doodling together. |
-| F-07 | Canvas History Archive | Gallery displaying historical snapshots of the shared canvas. | As a user, I want to browse past drawings we made so we can reminisce about our funny doodles. |
-| F-08 | In-App Text Backchannel | A simple text chat pane alongside the canvas for discussing drawings. | As a user, I want to type messages to my friends within the app so we don't have to leave to chat. |
-| F-09 | Premium Cosmetics Store | In-app purchases for exclusive brush packs, canvas frames, and avatar accessories. | As an active user, I want to purchase custom stickers and items to express myself uniquely. |
-| F-10 | Instant Emoji Reactions | Placing rapid stamp reactions (like fire, heart, skull) onto the widget. | As a busy user, I want to stamp a quick emoji on my friend's drawing to show my reaction instantly. |
-| F-11 | Daily Prompts & Streaks | Daily prompts ("Draw a cat!") and streak counters to incentivize daily opens. | As a user, I want to see daily ideas for what to draw so I never run out of inspiration and keep our streak alive. |
+| F-01 | Shared Canvas Sync | Real-time WebSocket sync backend for private "Vibe Rooms" (up to 5 friends). | As a user, I want my drawing strokes to sync with my close friends immediately in our private room. |
+| F-02 | Home-Screen Widget Rendering | Mobile widget rendering the latest canvas coordinate vector output as a rasterized image. | As a user, I want to see my group's canvas directly on my phone's home screen widget without opening the app. |
+| F-03 | Avatar Customizer & Presence | Set customized 2D avatars that display live states (Spotify playing, battery low). | As a user, I want my avatar to show my live mood/activity on the shared canvas so friends feel my ambient presence. |
+| F-04 | Vector Brush Engine | Doodle drawing canvas with multiple vector brush physics (neon, glow, custom colors). | As a creative user, I want to draw with expressive brushes that look aesthetic and load quickly as coordinates. |
+| F-05 | Silent Push Sync Engine | Background APNs/FCM triggers to refresh widget cache instantly when an edit is saved. | As a user, I want my widget to refresh as soon as a friend saves a new doodle. |
+| F-06 | Viral Onboarding & Invite Link | Onboard friends via deep links (SMS/Snapchat/TikTok) with automatic contact book sync. | As a user, I want to invite my inner circle instantly so we can start doodling together immediately. |
+| F-07 | Doodle Match (Discovery) | Complete a visual prompt (e.g., "draw a star") to match with strangers who drew similarly. | As a user, I want to match with new people based on drawing style compatibility so I can find friends naturally. |
+| F-08 | Community Tapestries | Public community whiteboards for interest groups (fandoms, gaming, art) with tile rendering. | As a fan, I want to add small doodles to a massive collaborative K-pop canvas and see it update live. |
+| F-09 | Live Doodle-Duets | Glow indicator showing when friends are active, enabling live real-time split-screen canvas drawing. | As a user, I want to see when my friend is active on the canvas so we can doodle together in real time. |
+| F-10 | On-Device AI Moderation | Lightweight on-device neural network (CoreML/TensorFlow) that checks drawings for NSFW content. | As a parent/user, I want inappropriate doodles to be auto-blocked before they ever reach my screen. |
+| F-11 | Shared Streaks & Pet Evolution | Visual pet on the canvas that grows or gets sad depending on daily sketch consistency. | As a friend group, I want to feed our digital pet by drawing daily so we can maintain our streak. |
 
 ---
 
@@ -29,123 +29,134 @@
 | ID | Feature | Must-have (MVP) | Nice-to-have | Future | Kill |
 |---|---|---|---|---|---|
 | F-01 | Shared Canvas Sync | ✅ | | | |
-| F-02 | Canvas Widget Rendering | ✅ | | | |
-| F-03 | Avatar Customizer | | ✅ | | |
-| F-04 | Doodle Sketching Canvas | ✅ | | | |
+| F-02 | Home-Screen Widget Rendering | ✅ | | | |
+| F-03 | Avatar Customizer & Presence | | ✅ | | |
+| F-04 | Vector Brush Engine | ✅ | | | |
 | F-05 | Silent Push Sync Engine | ✅ | | | |
-| F-06 | Friend Invite & Group Link | ✅ | | | |
-| F-07 | Canvas History Archive | | | ✅ | |
-| F-08 | In-App Text Backchannel | | | ✅ | |
-| F-09 | Premium Cosmetics Store | | | ✅ | |
-| F-10 | Instant Emoji Reactions | | ✅ | | |
-| F-11 | Daily Prompts & Streaks | | ✅ | | |
+| F-06 | Viral Onboarding & Invite Link | ✅ | | | |
+| F-07 | Doodle Match (Discovery) | ✅ | | | |
+| F-08 | Community Tapestries | | | ✅ | |
+| F-09 | Live Doodle-Duets | | ✅ | | |
+| F-10 | On-Device AI Moderation | ✅ | | | |
+| F-11 | Shared Streaks & Pet Evolution | | ✅ | | |
 
-**MVP features:** F-01, F-02, F-04, F-05, F-06  
+**MVP features:** F-01, F-02, F-04, F-05, F-06, F-07, F-10  
 **MVP rationale:**
-The MVP must validate if a close-friend group (F-06) will actively download the app, doodle (F-04), sync the strokes to a shared database (F-01), and enjoy seeing the results update on their home-screen widgets (F-02, F-05). Avatars, chats, and monetization features are secondary and do not validate the core hypothesis of home-screen widget social engagement.
+To validate Scribble as a *social platform*, we must prove: (1) private close-friend widget doodling works (F-01, F-02, F-04, F-05, F-06), (2) users will actively engage with visual matchmaking (F-07), and (3) we can scale safety using on-device moderation (F-10). Real-time duets, community canvases, and streaks can be added post-validation.
 
 ---
 
 ## Dependency Map
 
 ```
-F-06 (Friend Invite & Group Link)
-  └── F-01 (Shared Canvas Sync)
-        └── F-04 (Doodle Sketching Canvas)
-              └── F-05 (Silent Push Sync Engine)
-                    └── F-02 (Canvas Widget Rendering)
-                          ├── F-03 (Avatar Customizer)
-                          ├── F-10 (Instant Emoji Reactions)
-                          └── F-11 (Daily Prompts & Streaks)
+F-06 (Viral Onboarding)
+  ├── F-01 (Shared Canvas Sync)
+  │     ├── F-04 (Vector Brush Engine)
+  │     │     └── F-10 (On-Device AI Moderation)
+  │     │           ├── F-05 (Silent Push Sync Engine) ── F-02 (Widget Rendering)
+  │     │           └── F-07 (Doodle Match)
+  │     └── F-09 (Live Doodle-Duets)
+  └── F-08 (Community Tapestries)
 ```
 
 **Blocking dependencies:**
-- **F-06** blocks **F-01**: A shared database canvas sync cannot occur until a group of 2-5 users is established and linked.
-- **F-01** blocks **F-04**: Drawing tools cannot write to the canvas until the database structure for synced strokes is defined.
-- **F-04** blocks **F-05**: We cannot test push notifications for widget updates until drawings can be finalized and saved.
-- **F-05** blocks **F-02**: Widget updates on home screen depend entirely on silent pushes successfully triggering native system widget refreshes.
-
-**External dependencies:**
-- **Apple Push Notification service (APNs) & Firebase Cloud Messaging (FCM)** → Risk: Apple/Google throttling silent notifications will cause widget updates to lag or fail, rendering the widget static.
+- **F-06** blocks **F-01**: Canvases cannot sync until a user group or pairing is created.
+- **F-04** blocks **F-10**: The moderation model cannot analyze drawings until the vector coordinates are converted to drawing buffers.
+- **F-10** blocks **F-05** and **F-07**: Drawings cannot trigger widget pushes or match users until they pass the AI moderation check.
+- **F-08** (Community Tapestries) depends on **F-10** (Moderation) to prevent public spam.
 
 ---
 
 ## Critical Path
 
-The shortest sequence of features that gets us to a shippable MVP:
-
 ```
-[F-06: Group Link] → [F-01: Sync Backend] → [F-04: Drawing Canvas] → [F-05: Push Sync] → [F-02: Widget Render] → MVP
-      5 days               7 days                   8 days                 5 days               7 days         = 32 days
+[F-06: Onboarding] ──> [F-01: Canvas Sync] ──> [F-04: Brush Engine] ──> [F-10: AI Moderation] ──> [F-07: Doodle Match] ──> MVP
+        6 days                8 days                 10 days                 8 days                 10 days      = 42 days
 ```
 
-**Critical path length:** ~6.5 weeks (excluding app store review and QA testing).  
-**Float:** F-03, F-10, and F-11 are non-critical features and can slide without delaying the core MVP launch.
+**Critical path length:** 42 days (~8.5 weeks of pure dev time).
 
 ---
 
 ## Rollout Phases
 
-### Phase 0 — Technical Spike (Week 1–2)
-Goal: Validate that iOS WidgetKit and Android AppWidgets will successfully update their backgrounds upon receiving a silent push notification without performance penalties.
-- [ ] F-05: Silent Push Sync Engine (Mock push triggers)
-- [ ] F-02: Canvas Widget Rendering (Mock image display from silent pushes)
+### Phase 0 — Safety & Widget Spike (Week 1–2)
+Goal: Ensure widget update limits are handled, and train the local CoreML NSFW brush model.
+- [ ] F-10: On-Device AI Moderation (Train/test Mobilenet sketch model)
+- [ ] F-05: Silent Push Sync Engine
+- [ ] F-02: Home-Screen Widget Rendering
 
-### Phase 1 — Core App Development (Week 3–5)
-Goal: Build a working mobile app where friends can join a group, draw, and save sketches to a synced database.
-- [ ] F-06: Friend Invite & Group Link (Deep linking and group setup)
-- [ ] F-04: Doodle Sketching Canvas (Canvas engine on mobile)
-- [ ] F-01: Shared Canvas Sync (WebSocket sync API)
+### Phase 1 — Core Interaction (Week 3–6)
+Goal: Complete local vector brush tracking, sync private canvas data, and establish the user contact onboarding loop.
+- [ ] F-04: Vector Brush Engine (iOS Metal / Android Canvas coordinates)
+- [ ] F-01: Shared Canvas Sync (Node.js WebSockets database model)
+- [ ] F-06: Viral Onboarding & Invite Link (Deep-linking)
 
-### Phase 2 — MVP Integration (Week 6–8)
-Goal: Tie the app canvas, push server, and widget view together. Deploy to TestFlight/Google Play Closed Beta.
-- [ ] Integration of F-01, F-05, and F-02.
-- [ ] Basic NSFW content filtering (on-device image analyzer spike).
+### Phase 2 — Discovery & Matchmaking (Week 7–9)
+Goal: Implement Doodle Match algorithm and connect stranger widgets.
+- [ ] F-07: Doodle Match (Vector stroke clustering match engine)
+- [ ] Closed TestFlight/Google Play Beta launch (1,000 users)
 
-### Phase 3 — Growth & Monetization (Week 9+)
-Goal: Launch v1.0 globally, add retention prompts, and open custom cosmetics monetization.
-- [ ] F-03: Avatar Customizer (Bitmojis integration)
-- [ ] F-11: Daily Prompts & Streaks (Daily notification prompts)
-- [ ] F-09: Premium Cosmetics Store
+### Phase 3 — Communities & Fandoms (Week 10+)
+Goal: Launch public Community Tapestries, Live Duets, and monetization channels.
+- [ ] F-08: Community Tapestries (Tile canvas partitioning)
+- [ ] F-09: Live Doodle-Duets (Sync cursor pointers)
+- [ ] F-03: Avatar Customizer & Presence (Avatar customization shop)
 
 ---
 
 ## Algorithm / Technical Sketches
 
-### Asynchronous Widget Push-Refresh Flow
+### Vector Doodle Matchmaking Engine (F-07)
 
-To prevent OS battery limits from throttling the widget, VibeWidget will utilize a high-efficiency background update loop:
+Instead of using raw pixels (bitmaps) to compare drawings, Scribble matches drawings by parsing the stroke vectors (coordinates, angles, speed) of prompt completions.
 
 ```
-[Friend Device]                 [VibeWidget Server]               [User Device]
-       │                                 │                              │
-1. Saves Doodle ────────────────────────>│                              │
-       │                                 │ 2. Compress and save image   │
-       │                                 │ 3. Send APNs/FCM Silent Push │
-       │                                 │─────────────────────────────>│
-       │                                 │                              │ 4. Wake up background task
-       │                                 │                              │ 5. Download optimized image
-       │                                 │                              │ 6. Request Widget Refresh
-       │                                 │                              │ 7. Widget renders updated canvas
+[User Completed Prompt] 
+          │
+          ▼
+1. Fetch stroke coordinate sequence: S = {(x_1, y_1, t_1), (x_2, y_2, t_2), ...}
+          │
+          ▼
+2. Downsample and normalize stroke sequence: S_norm (scale to 0-1 bounding box)
+          │
+          ▼
+3. Compute DTW (Dynamic Time Warping) or Cosine Similarity against active prompt templates.
+          │
+          ▼
+4. Generate Vector Embedding: V_e = [d_1, d_2, d_3, ... d_64]
+          │
+          ▼
+5. Perform K-Nearest Neighbors (KNN) search in Pinecone/Milvus database:
+   Find users who completed prompt P within threshold T.
+          │
+          ▼
+[Match Successful! Send Notification to both users]
 ```
 
-**Silent Push Handler Algorithm (Client-Side):**
+### On-Device Content Moderation Flow (F-10)
+
 ```
-Receive RemoteNotification (UserInfo)
-  1. Extract payload: canvas_id, timestamp, asset_url
-  2. Read local cache: if timestamp <= local_cache.timestamp, exit (ignore stale updates)
-  3. Fetch image from asset_url (CDN cached)
-  4. Compress image and save to Shared App Group container (so Widget can access it)
-  5. Call WidgetCenter.shared.reloadAllTimelines() to force redraw
-  6. Return BackgroundFetchResult.newData
+[Draw Canvas] ──> [Save Trigger] ──> [Render Stroke Vectors to Bitmap]
+                                                    │
+                                                    ▼
+                                       [Load local CoreML MobileNet]
+                                                    │
+                                                    ▼
+                                        [Score image: 0.0 to 1.0]
+                                                    │
+                             ┌──────────────────────┴──────────────────────┐
+                             ▼ (Score >= 0.70)                             ▼ (Score < 0.70)
+                      [Flag: Block Upload]                         [Allow: Sync Canvas]
+                  Notify user: "Inappropriate"                     Silent APNs push to widget
 ```
 
 ---
 
 ## Open Questions Before Building Starts
-- [ ] **APNs Delivery Rate:** Does Apple enforce strict daily limits on silent push notifications (APNs priority 5) for social widget apps, and how does noteit bypass this?
-- [ ] **Moderation Engine:** How much latency does an on-device TensorFlow/CoreML NSFW check add to the canvas finalization flow?
-- [ ] **Vector vs. Raster Canvas:** Should we sync canvas strokes as JSON coordinate vectors (lighter weight, allows animating drawing playback) or flattened PNG images (easier to render on widgets)?
+- [ ] **On-Device Model Size:** Can we compress the CoreML sketch classifier to <15MB to ensure users don't face large app download sizes?
+- [ ] **Strangers on Widget Safety:** How long should a stranger connection be active in app chat *before* they are allowed to send doodles directly to a user's widget screen?
+- [ ] **Public Canvas Scaling:** How do we partition a 10,000 x 10,000 community canvas so that users only fetch visible canvas sectors/tiles?
 
 ---
 
@@ -153,6 +164,6 @@ Receive RemoteNotification (UserInfo)
 
 | Risk | Affects | Mitigation | Owner |
 |---|---|---|---|
-| OS Widget Throttling | F-02, F-05 | Implement a local client queue and queue widget updates so they reload at most once every 5 minutes. | Lead iOS Engineer |
-| High Server CDN Costs | F-01 | Convert all canvas drawings to lightweight vector SVG paths rather than streaming PNG files. | Backend Engineer |
-| Apple App Store Rejection | F-02 | Ensure the main app provides high utility (full canvas, drawing history, chats) so it is not marked as a "minimal widget companion". | Product Owner |
+| Public Canvas Spam / Griefing | F-08 | Implement a "doodle cool-down" timer (e.g., 1 drawing stroke every 15 seconds) and allow room moderators to delete strokes. | Trust & Safety Lead |
+| Model Performance on Low-End Phones | F-10 | Fall back to lightweight server-side moderation for devices older than iPhone 11 or budget Android models. | ML Engineer |
+| Network Match Failures | F-07 | If user pool is small, seed the system with "AI Doodle Bots" that draw back to keep users engaged during onboarding. | Product Owner |

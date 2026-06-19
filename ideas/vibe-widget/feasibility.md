@@ -1,4 +1,4 @@
-# Feasibility Analysis — VibeWidget
+# Feasibility Analysis — Scribble
 
 **Analyst:** Antigravity  
 **Date:** 2026-06-19  
@@ -10,13 +10,13 @@
 
 | Dimension | Assessment | Confidence |
 |---|---|---|
-| Core tech exists? | Partial | High |
-| Build complexity | High | High |
-| Key technical risks | iOS WidgetKit/Android AppWidgets strict update throttling, battery drain from background renders | High |
-| Existing solutions to learn from | noteit (doodle sharing), Locket Widget (photo sharing), Loklok (Android Lock Screen overlay) | High |
+| Core tech exists? | Yes | High |
+| Build complexity | Very High | High |
+| Key technical risks | Real-time visual synchronization for public community canvases, low-latency drawing duets, automated real-time NSFW scribble moderation before widget delivery | High |
+| Existing solutions to learn from | noteit (silent push widget updates), Reddit's r/place (massive collaborative canvas scaling), Tinder/Bumble (matchmaking architectures) | High |
 
 **Technical verdict:**
-True real-time whiteboard drawing directly on a home-screen widget is technically impossible on iOS/Android due to aggressive background execution limits and widget-refresh throttling. However, a "send-and-refresh" model using silent push notifications to update static widget canvas assets is highly feasible.
+Scaling a private widget sync to support massive public "Community Canvases" and AI-driven "Doodle Matchmaking" increases complexity from High to Very High. While private drawing widgets are feasible using standard silent APNs/FCM pushes, rendering real-time collaborative strokes for active "Doodle-Duets" requires high-performance WebSocket channels, and public canvases will require a tile-based rendering and partitioning system.
 
 ---
 
@@ -24,14 +24,14 @@ True real-time whiteboard drawing directly on a home-screen widget is technicall
 
 | Dimension | Assessment |
 |---|---|
-| Problem validated (evidence)? | Yes (noteit viral drawing widgets and Locket Widget's 30M+ signups demonstrate strong appetite for close-friend micro-interactions) |
+| Problem validated (evidence)? | Yes (Noplace reaching #1 on App Store in mid-2024 and Ten Ten's rapid adoption prove Gen Z's demand for raw, unfiltered, aesthetic-first connection spaces) |
 | Estimated TAM | $61.8 Billion (Future Market Insights - 2025 global mobile social networking market) |
-| Existing competitors | noteit (couple doodles), Locket Widget (photo sharing), Loklok (collaborative lock screen), WidgetShare |
-| Differentiation | Combines customized avatar states (bitmojis) and collaborative drawing/canvas elements on a single shared widget |
-| Market timing | Right (BeReal's €500M acquisition in 2024 and Gen Z's shift to private micro-communities validate high engagement signals) |
+| Existing competitors | noteit (drawings), Locket Widget (photos), Noplace (Gen Z profile customization), BeReal (authenticity), Discord (community hubs) |
+| Differentiation | Home screen widget-native interface. Rather than scrolling a list of posts, users interact with a live, co-edited visual canvas from their home screen. |
+| Market timing | Right (Gen Z is actively migrating away from corporate feeds like Instagram/TikTok to niche, cozy visual environments) |
 
 **Market verdict:**
-The market is highly receptive to private, authentic social widgets, but it is also highly competitive and prone to rapid trend decay. The combination of drawing and avatars offers a distinct visual upgrade over text-based or photo-based widgets.
+Pivoting Scribble to a full social platform dramatically expands the target market size by capturing interest-based communities, not just existing friend circles. The visual-first "Doodle Match" is a unique differentiator in a crowded dating/friend-finding market.
 
 ---
 
@@ -39,18 +39,18 @@ The market is highly receptive to private, authentic social widgets, but it is a
 
 | Dimension | Assessment |
 |---|---|
-| Team skills gap | Requires native iOS (Swift/WidgetKit) and Android (Kotlin/AppWidgets) design, plus low-latency image pipeline server |
-| Key dependencies | Apple Developer Program (APNs / WidgetKit entitlements), real-time CDN caching |
-| Time to MVP | 8–10 weeks |
-| Blockers | Strict App Store content moderation and COPPA guidelines for minors |
+| Team skills gap | Requires experience in real-time WebSockets, Vector database clustering (for drawing matches), on-device CoreML/TensorFlow, and trust & safety infrastructure |
+| Key dependencies | Apple/Google push gateways, scalable visual CDNs, automated NSFW image-filtering APIs |
+| Time to MVP | 10–12 weeks |
+| Blockers | Strict Apple/Google guidelines regarding user-generated content (UGC). A single unmoderated NSFW doodle delivered to a minor's widget will lead to app store ban. |
 
 **Operational verdict:**
-Straightforward operational setup, but requires specialized mobile app engineers who understand system-level widget background behavior to prevent app rejection.
+Operationally complex. Moving into the public social space requires an immediate and robust trust & safety engine (moderation filters, reporting systems) from day one.
 
 ---
 
 ## 4. Regulatory / Legal
-Because the primary target demographic is Gen Z, which includes teenagers under the age of 18, the app must comply strictly with **COPPA (Children's Online Privacy Protection Act)** and **GDPR**. This requires robust age-gating, secure data storage, and strict content moderation (automated NSFW filtering of doodles) to prevent platform abuse.
+Operating a public Gen Z social platform requires compliance with **COPPA** (strict parental consent loops for users under 13), **GDPR**, and the **Digital Services Act (DSA)**. Content moderation pipelines must be documented and auditable to prevent online harassment and platform abuse.
 
 ---
 
@@ -59,70 +59,70 @@ Rank by severity × probability:
 
 | Risk | Severity | Probability | Mitigation |
 |---|---|---|---|
-| OS Widget Throttling | High | High | Pivot from real-time drawing tracking to a "publish/send" save trigger that updates the widget asynchronously via APNs. |
-| Engagement Churn (Creative Fatigue) | High | Medium | Add pre-designed stickers, daily doodle prompts, and customizable widgets to reduce the friction of drawing from scratch. |
-| App Fatigue / Install Friction | High | High | Implement a viral SMS referral system where a host can invite 4 friends with single-tap onboarding. |
-| NSFW Doodles / Abuse | Medium | High | Apply automated on-device and server-side image recognition filters to scan sketches before they render on friends' home screens. |
+| **UGC Moderation Failure** (NSFW sketches pushed to home screen widgets) | Critical | High | Run drawings through an on-device convolutional neural network (CNN) image classifier before upload, and apply a 3-report auto-hide protocol for public canvases. |
+| **Widget Update Throttling** | High | High | Deliver local UI rendering feedback immediately, queueing the cloud sync and widget updates to trigger asynchronously. |
+| **Empty Room Syndrome** (Public canvases lack active drawers) | High | Medium | Integrate automated daily prompt systems and AI collaborative brushes that draw with the user to keep the canvas alive. |
+| **Matchmaking Churn** (Matched users stop drawing after a day) | Medium | High | Introduce streaks and evolving shared assets (digital pets) that grow based on collaborative doodle frequency. |
 
 ---
 
 ## 6. Critical Assumptions to Validate First
-1. **Push-to-Widget Reliability:** Build a native iOS/Android widget proof-of-concept that updates a widget canvas based on background pushes to test OS refresh limits.
-2. **Creative Retention:** Test if a pilot group of users will doodle consistently over a 7-day period if given templates/prompts, or if drawing becomes a chore.
-3. **Download Friction:** Validate if Gen Z users are willing to recruit 3–5 friends to download a utility app simultaneously without paying a heavy acquisition cost.
+1. **Moderation Latency:** Validate if a lightweight, on-device CoreML image-filter can detect inappropriate sketches in <150ms without lagging the draw experience.
+2. **Doodle Similarity Matching:** Build a prototype vector clustering algorithm that can match coordinate arrays of drawings of the same prompt (e.g., "draw a star").
+3. **Public Canvas Bandwidth:** Test the performance of a WebSocket server synchronizing 1,000 active concurrent drawing pointers on a shared coordinate canvas.
 
 ---
 
 ## Verdict & Recommendation
 **Verdict:** 🟡 Conditionally Feasible  
-**Reasoning:** The idea is technically viable only if we abandon the "real-time canvas stream" concept on the widget itself and instead use an asynchronous "save-to-push" asset update model. Market demand is proven, but retention is the chief risk since doodling is high-friction.  
-**Recommended next step:** Proceed to profitability-modeling and validate the background widget update budget in a technical spike.
+**Reasoning:** The platform is highly viable if we invest heavily in automatic moderation filters and use a stroke-coordinate system (vectors) instead of rasterized images to keep backend bandwidth costs low. The potential viral growth of "Doodle Match" makes this risk worth pursuing.  
+**Recommended next step:** Refine the profitability model to account for higher hosting/moderation costs and draft the updated MVP roadmap.
 
 ---
 
-## Assumption Stress-Test: VibeWidget
+## Assumption Stress-Test: Scribble
 
 ### The 5 Most Dangerous Assumptions
 
 ---
 
-**Assumption 1: iOS and Android operating systems allow widgets to update in real-time or near real-time with low latency.**
-- Why it might be wrong: iOS WidgetKit and Android AppWidgets enforce strict background update budgets and execution limits to conserve battery. A widget that updates with every stroke or even every minute is likely to be throttled, delayed, or suspended by the OS, breaking the "live" interactive home-screen experience.
-- Cheap validation: Build a minimal, native widget proof-of-concept on iOS and Android that fetches and renders a new image from a remote server every 30 seconds, and run it for 24 hours to see when the OS begins throttling updates.
+**Assumption 1: Automated moderation models can accurately block inappropriate visual content (NSFW/hate symbols) drawn by hand in real-time.**
+- Why it might be wrong: Sketching allows for infinite creative variations, abstract symbols, and text written in doodles. Standard image moderation models are trained on photos, not rough line sketches, and will suffer from high false-negative rates, leading to offensive content leaking to users' widgets.
+- Cheap validation: Collect a dataset of 500 hand-drawn sketches (appropriate and inappropriate) and benchmark existing open-source sketch moderation models to check accuracy.
+- Kill probability if wrong: Critical
+
+---
+
+**Assumption 2: Users will feel comfortable allowing public community doodles or doodles from matched strangers to update directly on their personal home screens.**
+- Why it might be wrong: The home screen is highly personal real estate. If a stranger draws something annoying, weird, or unappealing, users will instantly delete the widget to reclaim control over their home screen aesthetic.
+- Cheap validation: Run a prototype study where 15 Gen Z users link their widgets to a semi-moderated stranger's stream for 3 days and survey their comfort levels and drop-off rates.
 - Kill probability if wrong: High
 
 ---
 
-**Assumption 2: Users will sustain daily, active collaborative doodling rather than reverting to passive viewing.**
-- Why it might be wrong: Creating drawings and doodles requires significant cognitive effort and creative friction compared to snapping a photo or typing a message. Once the initial novelty wears off, most users will stop doodling, leaving the shared canvas static and causing others to uninstall the widget.
-- Cheap validation: Create a shared Figma canvas or Google Jamboard for 5 separate friend groups of 3–5 people, instruct them to doodle daily, and monitor how many groups keep active after 5 days.
-- Kill probability if wrong: High
-
----
-
-**Assumption 3: A purely visual, non-text communication medium can sustain long-term engagement on its own.**
-- Why it might be wrong: Without a text chat backchannel, users will inevitably have to leave the widget to explain their drawings, make plans, or discuss the doodles in detail on WhatsApp, Snapchat, or iMessage. Once they switch to those platforms, they are likely to stay there and abandon VibeWidget.
-- Cheap validation: Challenge 3 friend groups to communicate exclusively via shared sketching/doodling on a tool like whiteboard.fi for 3 days, and observe how quickly they fail or cheat by using other chat apps.
+**Assumption 3: Drawing coordinate/vector matching is an effective proxy for personal compatibility in matchmaking.**
+- Why it might be wrong: Just because two people complete a drawing prompt in a similar style does not mean they will have conversational chemistry. Users may find matches superficial, leading to rapid drop-off in active chats.
+- Cheap validation: Set up a manual matching game on a Discord server where 50 users are matched based on how they complete a visual prompt. Measure how many conversations last beyond 5 messages.
 - Kill probability if wrong: Medium
 
 ---
 
-**Assumption 4: Gen Z friend groups will coordinate to download and install a new social app together.**
-- Why it might be wrong: Social utilities require co-dependent network effects; if even one friend in a group of 5 refuses to download the app or uninstall it, the utility of the widget drops to zero for the entire group. Gen Z has high fatigue for new social apps.
-- Cheap validation: Recruit 5 Gen Z friend groups (3–5 people each) and offer them a small collective reward (e.g., ₹2000 total) if all members download and configure a basic widget mockup for a week. Monitor drop-off and installation friction.
+**Assumption 4: Fandoms and online interest communities will actively draw together on public widgets instead of chatting on Discord or Reddit.**
+- Why it might be wrong: Doodling is highly collaborative but lacks information density. Fandoms exist to share news, gossip, and detailed media, which cannot be expressed easily in doodles, meaning public canvases might remain gimmick tools.
+- Cheap validation: Create a public collaborative whiteboard for a popular fandom (e.g., a specific K-pop band or anime) on a platform like Miro, post it on Reddit/Twitter, and track daily active drawing volume over a week.
 - Kill probability if wrong: High
 
 ---
 
-**Assumption 5: Home-screen widgets are a long-term preferred channel for social interactions, rather than a short-lived fad.**
-- Why it might be wrong: While widgets like Locket had viral moments, home-screen real estate is highly competitive and personal. Users quickly clean up clutter on their home screen and remove widgets once the initial novelty of seeing their friends' updates fades.
-- Cheap validation: Run a survey or qualitative interviews with 20 Gen Z users who previously installed widget-based social apps (e.g., Locket, Widgetshare) to measure their long-term retention and current active usage of those apps.
+**Assumption 5: Server costs for scaling real-time WebSocket coordinate streaming for thousands of concurrent drawers can be offset by freemium/IAP models.**
+- Why it might be wrong: Real-time WebSockets and database writes are expensive at scale. If 98% of the community remains free tier, server overhead may outpace ad/subscription revenues.
+- Cheap validation: Run a load test simulating 10,000 concurrent drawing connections to calculate hosting costs and project MRR targets needed to sustain them.
 - Kill probability if wrong: Medium
 
 ---
 
 ### The One Thing Most Likely to Kill This Idea
-The strict background execution and update rate limits imposed by iOS (WidgetKit) and Android (AppWidgets). Because these operating systems aggressively throttle widget refreshes to preserve battery and memory, a true "real-time interactive canvas" on the home screen is technically impossible. Without real-time sync, the widget becomes a lagging, static image display, forcing users into the main app and stripping the idea of its primary differentiator over standard photo-sharing widgets.
+The moderation risk of public canvases. If a malicious user bypasses filters and posts offensive sketches directly onto hundreds of users' home screens, the app will face immediate user backlash, public PR crises, and swift removal from the iOS App Store and Google Play Store for violating UGC safety guidelines.
 
 ### What the Team is Probably Overconfident About
-The team is overconfident about the long-term engagement value of doodling, assuming that users will continuously put in the creative effort to sketch rather than just sending quick photos or text. They are also overconfident about their ability to overcome Gen Z's high app-download fatigue without offering a robust text-chat system.
+The team is overconfident that visual matching alone can sustain social relationships, assuming that the novelty of doodle matching can replace the rich text-and-media features of mature social apps. They are also underestimating the operational overhead of trust & safety moderation.
