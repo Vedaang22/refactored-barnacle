@@ -1,8 +1,8 @@
 # Feature Roadmap — Scribble
 
-**Date:** 2026-06-19  
+**Date:** 2026-06-20  
 **Based on:** [feasibility.md](file:///D:/my-projects/refactored-barnacle/ideas/vibe-widget/feasibility.md) and [profitability.md](file:///D:/my-projects/refactored-barnacle/ideas/vibe-widget/profitability.md)  
-**Horizon:** 10 weeks to MVP, 20 weeks to v1.0
+**Horizon:** 12 weeks to MVP, 24 weeks to v1.0
 
 ---
 
@@ -10,17 +10,16 @@
 
 | ID | Feature | Description | User story (as a ___ I want to ___ so that ___) |
 |---|---|---|---|
-| F-01 | Shared Canvas Sync | Real-time WebSocket sync backend for private "Vibe Rooms" (up to 5 friends). | As a user, I want my drawing strokes to sync with my close friends immediately in our private room. |
-| F-02 | Home-Screen Widget Rendering | Mobile widget rendering the latest canvas coordinate vector output as a rasterized image. | As a user, I want to see my group's canvas directly on my phone's home screen widget without opening the app. |
-| F-03 | Avatar Customizer & Presence | Set customized 2D avatars that display live states (Spotify playing, battery low). | As a user, I want my avatar to show my live mood/activity on the shared canvas so friends feel my ambient presence. |
-| F-04 | Vector Brush Engine | Doodle drawing canvas with multiple vector brush physics (neon, glow, custom colors). | As a creative user, I want to draw with expressive brushes that look aesthetic and load quickly as coordinates. |
-| F-05 | Silent Push Sync Engine | Background APNs/FCM triggers to refresh widget cache instantly when an edit is saved. | As a user, I want my widget to refresh as soon as a friend saves a new doodle. |
-| F-06 | Viral Onboarding & Invite Link | Onboard friends via deep links (SMS/Snapchat/TikTok) with automatic contact book sync. | As a user, I want to invite my inner circle instantly so we can start doodling together immediately. |
-| F-07 | Doodle Match (Discovery) | Complete a visual prompt (e.g., "draw a star") to match with strangers who drew similarly. | As a user, I want to match with new people based on drawing style compatibility so I can find friends naturally. |
-| F-08 | Community Tapestries | Public community whiteboards for interest groups (fandoms, gaming, art) with tile rendering. | As a fan, I want to add small doodles to a massive collaborative K-pop canvas and see it update live. |
-| F-09 | Live Doodle-Duets | Glow indicator showing when friends are active, enabling live real-time split-screen canvas drawing. | As a user, I want to see when my friend is active on the canvas so we can doodle together in real time. |
-| F-10 | On-Device AI Moderation | Lightweight on-device neural network (CoreML/TensorFlow) that checks drawings for NSFW content. | As a parent/user, I want inappropriate doodles to be auto-blocked before they ever reach my screen. |
-| F-11 | Shared Streaks & Pet Evolution | Visual pet on the canvas that grows or gets sad depending on daily sketch consistency. | As a friend group, I want to feed our digital pet by drawing daily so we can maintain our streak. |
+| F-01 | Spatial Room Builder | A 2D pixel-art grid editor to place, rotate, and layer furniture items on a user profile Room. | As a user, I want to customize my room with furniture so it expresses my personal style. |
+| F-02 | Guest Blackboard Widget | An interactive blackboard in a user's Room where visitors can doodle and sign messages. | As a visitor, I want to leave a doodle on my friend's room Blackboard so they know I visited. |
+| F-03 | Community Halls | Public thematic lobbies (e.g. Anime Lounge, Music Hall) displaying submitted user room cards. | As a user, I want to explore themed Halls to find cool rooms and make new friends. |
+| F-04 | Ambient Vibe-Casting | Sync and render real-time phone states (local weather effects, battery charging state) in the Room. | As a user, I want my Room environment to sync with my actual weather so my friends feel co-present. |
+| F-05 | Spotify Jukebox Widget | Interactive object linking Spotify SDK to display current tracks and play 10s song snippets. | As a visitor, I want to tap my friend's Jukebox to listen to their current favorite song. |
+| F-06 | Widget Games | Asynchronous micro-games (Tic-Tac-Toe, Pet Feed) played directly on the home-screen widget. | As a user, I want to take my turn in Tic-Tac-Toe directly from my home screen widget. |
+| F-07 | Voice Scribbles | Draw visual doodles that record and playback synchronized audio when tapped. | As a user, I want to draw a Voice Scribble so my friends see the drawing build as they hear my voice message. |
+| F-08 | On-Device AI Moderation | Local mobile classifier that scans sketches on Guest Blackboards before saving. | As a user, I want drawings to be filtered for NSFW content so my Blackboard widget stays safe. |
+| F-09 | Live Room Duets | Live presence indicators (glowing doors) showing when a friend is active in your Room. | As a user, I want to see when a friend is visiting my room so we can hang out together. |
+| F-10 | Profile Link Sharing | Custom deep-links (e.g. `scribble.me/user`) that render high-fidelity previews when shared. | As a user, I want to share a beautiful link of my Room on TikTok to invite new followers. |
 
 ---
 
@@ -28,135 +27,112 @@
 
 | ID | Feature | Must-have (MVP) | Nice-to-have | Future | Kill |
 |---|---|---|---|---|---|
-| F-01 | Shared Canvas Sync | ✅ | | | |
-| F-02 | Home-Screen Widget Rendering | ✅ | | | |
-| F-03 | Avatar Customizer & Presence | | ✅ | | |
-| F-04 | Vector Brush Engine | ✅ | | | |
-| F-05 | Silent Push Sync Engine | ✅ | | | |
-| F-06 | Viral Onboarding & Invite Link | ✅ | | | |
-| F-07 | Doodle Match (Discovery) | ✅ | | | |
-| F-08 | Community Tapestries | | | ✅ | |
-| F-09 | Live Doodle-Duets | | ✅ | | |
-| F-10 | On-Device AI Moderation | ✅ | | | |
-| F-11 | Shared Streaks & Pet Evolution | | ✅ | | |
+| F-01 | Spatial Room Builder | ✅ | | | |
+| F-02 | Guest Blackboard Widget | ✅ | | | |
+| F-03 | Community Halls | ✅ | | | |
+| F-04 | Ambient Vibe-Casting | | ✅ | | |
+| F-05 | Spotify Jukebox Widget | | ✅ | | |
+| F-06 | Widget Games | ✅ | | | |
+| F-07 | Voice Scribbles | | ✅ | | |
+| F-08 | On-Device AI Moderation | ✅ | | | |
+| F-09 | Live Room Duets | | ✅ | | |
+| F-10 | Profile Link Sharing | ✅ | | | |
 
-**MVP features:** F-01, F-02, F-04, F-05, F-06, F-07, F-10  
+**MVP features:** F-01, F-02, F-03, F-06, F-08, F-10  
 **MVP rationale:**
-To validate Scribble as a *social platform*, we must prove: (1) private close-friend widget doodling works (F-01, F-02, F-04, F-05, F-06), (2) users will actively engage with visual matchmaking (F-07), and (3) we can scale safety using on-device moderation (F-10). Real-time duets, community canvases, and streaks can be added post-validation.
+The MVP must validate the spatial social platform core: (1) users want to build rooms (F-01) and share them (F-10), (2) friends will interact via widgets with games (F-06) and Guest Blackboards (F-02), and (3) users can discover rooms via Community Halls (F-03) safely (F-08). Voice Scribbles and Jukeboxes are post-validation retention features.
 
 ---
 
 ## Dependency Map
 
 ```
-F-06 (Viral Onboarding)
-  ├── F-01 (Shared Canvas Sync)
-  │     ├── F-04 (Vector Brush Engine)
-  │     │     └── F-10 (On-Device AI Moderation)
-  │     │           ├── F-05 (Silent Push Sync Engine) ── F-02 (Widget Rendering)
-  │     │           └── F-07 (Doodle Match)
-  │     └── F-09 (Live Doodle-Duets)
-  └── F-08 (Community Tapestries)
+F-10 (Profile Link Sharing)
+  ├── F-01 (Spatial Room Builder)
+  │     ├── F-02 (Guest Blackboard) ── F-08 (AI Moderation)
+  │     └── F-06 (Widget Games)
+  └── F-03 (Community Halls)
+        ├── F-04 (Ambient Vibe-Casting)
+        ├── F-05 (Spotify Jukebox)
+        └── F-07 (Voice Scribbles)
 ```
 
 **Blocking dependencies:**
-- **F-06** blocks **F-01**: Canvases cannot sync until a user group or pairing is created.
-- **F-04** blocks **F-10**: The moderation model cannot analyze drawings until the vector coordinates are converted to drawing buffers.
-- **F-10** blocks **F-05** and **F-07**: Drawings cannot trigger widget pushes or match users until they pass the AI moderation check.
-- **F-08** (Community Tapestries) depends on **F-10** (Moderation) to prevent public spam.
+- **F-10** blocks **F-01**: Room layouts cannot be shared or linked until the profile sharing backend exists.
+- **F-01** blocks **F-02** & **F-06**: Whiteboards and widget games cannot be placed in a room until the spatial room layout engine is functional.
+- **F-02** blocks **F-08**: The moderation model cannot screen guest drawings until the Guest Blackboard canvas is built.
+- **F-03** blocks F-04, F-05, and F-07: Fandom assets require community hub structures to exist.
 
 ---
 
 ## Critical Path
 
 ```
-[F-06: Onboarding] ──> [F-01: Canvas Sync] ──> [F-04: Brush Engine] ──> [F-10: AI Moderation] ──> [F-07: Doodle Match] ──> MVP
-        6 days                8 days                 10 days                 8 days                 10 days      = 42 days
+[F-10: Link Sharing] ──> [F-01: Room Builder] ──> [F-02: Guest Board] ──> [F-08: AI Moderation] ──> [F-06: Widget Games] ──> MVP
+        6 days                  12 days                  8 days                  8 days                  10 days       = 44 days
 ```
 
-**Critical path length:** 42 days (~8.5 weeks of pure dev time).
+**Critical path length:** 44 days (~9 weeks of pure dev time).
 
 ---
 
 ## Rollout Phases
 
-### Phase 0 — Safety & Widget Spike (Week 1–2)
-Goal: Ensure widget update limits are handled, and train the local CoreML NSFW brush model.
-- [ ] F-10: On-Device AI Moderation (Train/test Mobilenet sketch model)
-- [ ] F-05: Silent Push Sync Engine
-- [ ] F-02: Home-Screen Widget Rendering
+### Phase 0 — Widget & Interaction Spike (Week 1–3)
+Goal: Prove interactive widget games work on iOS/Android, and train the local CoreML sketch filter.
+- [ ] F-06: Widget Games (Build an interactive Tic-Tac-Toe widget prototype)
+- [ ] F-08: On-Device AI Moderation (Train sketch classification weights)
 
-### Phase 1 — Core Interaction (Week 3–6)
-Goal: Complete local vector brush tracking, sync private canvas data, and establish the user contact onboarding loop.
-- [ ] F-04: Vector Brush Engine (iOS Metal / Android Canvas coordinates)
-- [ ] F-01: Shared Canvas Sync (Node.js WebSockets database model)
-- [ ] F-06: Viral Onboarding & Invite Link (Deep-linking)
+### Phase 1 — Spatial Editor (Week 4–7)
+Goal: Complete the 2D room builder grid engine and deep-linking share system.
+- [ ] F-01: Spatial Room Builder (Grid coordinate layout and asset layers)
+- [ ] F-10: Profile Link Sharing (TikTok/Instagram rich previews)
 
-### Phase 2 — Discovery & Matchmaking (Week 7–9)
-Goal: Implement Doodle Match algorithm and connect stranger widgets.
-- [ ] F-07: Doodle Match (Vector stroke clustering match engine)
-- [ ] Closed TestFlight/Google Play Beta launch (1,000 users)
+### Phase 2 — Social Integration (Week 8–10)
+Goal: Launch Guest Blackboards, Community Halls, and closed beta.
+- [ ] F-02: Guest Blackboard Widget
+- [ ] F-03: Community Halls (Lounges for showcasing rooms)
+- [ ] Closed TestFlight/Google Play beta (1,000 active users)
 
-### Phase 3 — Communities & Fandoms (Week 10+)
-Goal: Launch public Community Tapestries, Live Duets, and monetization channels.
-- [ ] F-08: Community Tapestries (Tile canvas partitioning)
-- [ ] F-09: Live Doodle-Duets (Sync cursor pointers)
-- [ ] F-03: Avatar Customizer & Presence (Avatar customization shop)
+### Phase 3 — Fandom & Ambient Additions (Week 11+)
+Goal: Launch v1.0 globally, add ambient castings, Spotify integration, and cosmetics.
+- [ ] F-05: Spotify Jukebox Widget
+- [ ] F-04: Ambient Vibe-Casting (Local weather sync)
+- [ ] F-07: Voice Scribbles
 
 ---
 
 ## Algorithm / Technical Sketches
 
-### Vector Doodle Matchmaking Engine (F-07)
+### Interactive Widget Game Action Intent (F-06)
 
-Instead of using raw pixels (bitmaps) to compare drawings, Scribble matches drawings by parsing the stroke vectors (coordinates, angles, speed) of prompt completions.
-
-```
-[User Completed Prompt] 
-          │
-          ▼
-1. Fetch stroke coordinate sequence: S = {(x_1, y_1, t_1), (x_2, y_2, t_2), ...}
-          │
-          ▼
-2. Downsample and normalize stroke sequence: S_norm (scale to 0-1 bounding box)
-          │
-          ▼
-3. Compute DTW (Dynamic Time Warping) or Cosine Similarity against active prompt templates.
-          │
-          ▼
-4. Generate Vector Embedding: V_e = [d_1, d_2, d_3, ... d_64]
-          │
-          ▼
-5. Perform K-Nearest Neighbors (KNN) search in Pinecone/Milvus database:
-   Find users who completed prompt P within threshold T.
-          │
-          ▼
-[Match Successful! Send Notification to both users]
-```
-
-### On-Device Content Moderation Flow (F-10)
+To handle instant widget button taps (e.g. placing an 'X' in Tic-Tac-Toe) without visual lag:
 
 ```
-[Draw Canvas] ──> [Save Trigger] ──> [Render Stroke Vectors to Bitmap]
-                                                    │
-                                                    ▼
-                                       [Load local CoreML MobileNet]
-                                                    │
-                                                    ▼
-                                        [Score image: 0.0 to 1.0]
-                                                    │
-                             ┌──────────────────────┴──────────────────────┐
-                             ▼ (Score >= 0.70)                             ▼ (Score < 0.70)
-                      [Flag: Block Upload]                         [Allow: Sync Canvas]
-                  Notify user: "Inappropriate"                     Silent APNs push to widget
+[User taps grid button on home screen widget]
+                   │
+                   ▼
+1. Trigger AppIntent / PendingIntent (passing cell_id, match_id)
+                   │
+                   ▼
+2. Read Local Widget State File (JSON cache)
+                   │
+                   ▼
+3. Instantly write updated state locally: Match.board[cell_id] = 'X'
+                   │
+                   ▼
+4. Call WidgetCenter.shared.reloadTimelines() (re-draws widget instantly from local cache)
+                   │
+                   ▼
+5. Spin up background queue task to sync board state to DB server via HTTP POST
 ```
 
 ---
 
 ## Open Questions Before Building Starts
-- [ ] **On-Device Model Size:** Can we compress the CoreML sketch classifier to <15MB to ensure users don't face large app download sizes?
-- [ ] **Strangers on Widget Safety:** How long should a stranger connection be active in app chat *before* they are allowed to send doodles directly to a user's widget screen?
-- [ ] **Public Canvas Scaling:** How do we partition a 10,000 x 10,000 community canvas so that users only fetch visible canvas sectors/tiles?
+- [ ] **Interactive Widget Budget:** Does iOS limit the number of `AppIntent` timeline reloads per hour for interactive widgets?
+- [ ] **Asset Scaling:** How do we optimize rendering for custom pixel-art assets to prevent device overheating during editing?
+- [ ] **Community Moderation:** Do we require user-selected "Hall Wardens" (moderators) to manually sweep public rooms?
 
 ---
 
@@ -164,6 +140,6 @@ Instead of using raw pixels (bitmaps) to compare drawings, Scribble matches draw
 
 | Risk | Affects | Mitigation | Owner |
 |---|---|---|---|
-| Public Canvas Spam / Griefing | F-08 | Implement a "doodle cool-down" timer (e.g., 1 drawing stroke every 15 seconds) and allow room moderators to delete strokes. | Trust & Safety Lead |
-| Model Performance on Low-End Phones | F-10 | Fall back to lightweight server-side moderation for devices older than iPhone 11 or budget Android models. | ML Engineer |
-| Network Match Failures | F-07 | If user pool is small, seed the system with "AI Doodle Bots" that draw back to keep users engaged during onboarding. | Product Owner |
+| Widget Latency | F-06 | Fall back to opening the app on tap if OS background intents throttle drawing. | Lead iOS Engineer |
+| Storage Overrun | F-01 | Restrict custom item uploads to standard template catalog items in v1. | Backend Engineer |
+| Abuse on Whiteboards | F-02 | Allow room owners to wipe their blackboard instantly or set whiteboard permissions to "Friends Only." | Product Owner |
